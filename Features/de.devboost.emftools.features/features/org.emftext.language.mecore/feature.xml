@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><feature id="org.emftext.language.mecore" label="EMFText Syntax: Ecore Minimal Syntax" provider-name="Software Technology Group - TU Dresden" version="0.0.0">
+
+   <description>MinimalEcore is a compact textual syntax for Ecore models.</description>
+
+   <copyright>Copyright (c) 2006-2012 Software Technology Group, Dresden University of Technology, Germany; DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.</copyright>
+
+   <license>Eclipse Public License v1.0
+
+Copyright (c) 2006-2012
+Software Technology Group, Dresden University of Technology
+DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.
+
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
+
+Contributors:
+  Software Technology Group - TU Dresden, Germany;
+  DevBoost GmbH - Berlin, Germany
+     - initial API and implementation
+ </license>
+
+   <requires>
+	 <import feature="org.eclipse.platform"/>
+	 <import feature="org.eclipse.emf"/>
+	 <import feature="org.emftext.commons.antlr3_4_0"/>
+   </requires>
+
+   <plugin download-size="0" id="org.emftext.language.mecore" install-size="0" unpack="false" version="0.0.0"/>
+
+   <plugin download-size="0" id="org.emftext.language.mecore.edit" install-size="0" unpack="false" version="0.0.0"/>
+
+   <plugin download-size="0" id="org.emftext.language.mecore.postprocessing" install-size="0" unpack="false" version="0.0.0"/>
+
+   <plugin download-size="0" id="org.emftext.language.mecore.resource.mecore" install-size="0" unpack="false" version="0.0.0"/>
+         
+   <plugin download-size="0" id="org.emftext.language.mecore.resource.mecore.ui" install-size="0" unpack="false" version="0.0.0"/>
+         
+</feature>

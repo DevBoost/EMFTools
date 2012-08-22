@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site associateSitesURL="http://www.devboost.de/emftools/update_trunk/associateSites.xml">
+	<description>
+		Update site for MinimalEcore, eJava, EMFCustomize and EMFDoc.
+	</description>
+	
+	<feature url="features/de.devboost.emfcustomize_0.0.0.v0.jar" id="de.devboost.emfcustomize" version="0.0.0.v0">
+		<category name="EMFCustomize"/>
+	</feature>
+	<feature url="features/org.emftext.language.emfdoc_0.0.0.v0.jar" id="org.emftext.language.emfdoc" version="0.0.0.v0">
+		<category name="EMFDoc"/>
+	</feature>
+	<feature url="features/org.emftext.language.java.ejava_0.0.0.v0.jar" id="org.emftext.language.java.ejava" version="0.0.0.v0">
+		<category name="eJava"/>
+	</feature>
+	<feature url="features/org.emftext.language.mecore_0.0.0.v0.jar" id="org.emftext.language.mecore" version="0.0.0.v0">
+		<category name="MinimalEcore"/>
+	</feature>
+			
+	<category-def name="EMFCustomize" label="EMFCustomize">
+		<description>
+			EMFCustomize allows to implement operations for EMF Ecore models using the plain Eclipse Java JDT editor while preserving a clean separation between generated and hand-written code.
+		</description>
+	</category-def>
+	<category-def name="EMFDoc" label="EMFDoc">
+		<description>
+			EMFDoc can be used to document Ecore models.
+		</description>
+	</category-def>
+	<category-def name="eJava" label="eJava">
+		<description>
+			eJava is a specification language for eOperation bodys in Ecore models.
+		</description>
+	</category-def>
+	<category-def name="MinimalEcore" label="MinimalEcore">
+		<description>
+			MinimalEcore is a compact textual syntax for Ecore models.
+		</description>
+	</category-def>
+</site>
