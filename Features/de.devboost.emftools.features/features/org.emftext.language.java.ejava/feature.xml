@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><feature id="org.emftext.language.java.ejava" label="eJava: Specification Language for eOperations" provider-name="Software Technology Group - TU Dresden" version="0.0.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<feature
+	id="org.emftext.language.java.ejava"
+	label="eJava: Specification Language for eOperations"
+	provider-name="DevBoost GmbH"
+	version="0.0.0">
 
    <description>eJava is a specification language for eOperation bodys in Ecore models.</description>
 

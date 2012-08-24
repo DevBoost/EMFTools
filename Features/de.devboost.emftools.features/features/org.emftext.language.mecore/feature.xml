@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><feature id="org.emftext.language.mecore" label="EMFText Syntax: Ecore Minimal Syntax" provider-name="Software Technology Group - TU Dresden" version="0.0.0">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<feature
+	id="org.emftext.language.mecore"
+	label="MinimalEcore"
+	provider-name="DevBoost GmbH" 
+	version="0.0.0">
 
    <description>MinimalEcore is a compact textual syntax for Ecore models.</description>
 

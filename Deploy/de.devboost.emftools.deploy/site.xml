@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site associateSitesURL="http://www.devboost.de/emftools/update_trunk/associateSites.xml">
 	<description>
-		Update site for MinimalEcore, eJava, EMFCustomize and EMFDoc.
+		Update site for MinimalEcore, EFactory, eJava, EMFCustomize and EMFDoc.
 	</description>
 	
 	<feature url="features/de.devboost.emfcustomize_0.0.0.v0.jar" id="de.devboost.emfcustomize" version="0.0.0.v0">
@@ -15,6 +15,9 @@
 	</feature>
 	<feature url="features/org.emftext.language.mecore_0.0.0.v0.jar" id="org.emftext.language.mecore" version="0.0.0.v0">
 		<category name="MinimalEcore"/>
+	</feature>
+	<feature url="features/org.emftext.language.efactory_0.0.0.v0.jar" id="org.emftext.language.efactory" version="0.0.0.v0">
+		<category name="EFactory"/>
 	</feature>
 			
 	<category-def name="EMFCustomize" label="EMFCustomize">
@@ -37,4 +40,9 @@
 			MinimalEcore is a compact textual syntax for Ecore models.
 		</description>
 	</category-def>
+	<category-def name="EFactory" label="EFactory">
+		<description>
+			EFactory is a generic language to create instances of arbitrary Ecore models.
+		</description>
+	</category-def>	
 </site>

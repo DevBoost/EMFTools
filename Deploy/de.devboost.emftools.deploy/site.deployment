@@ -3,7 +3,4 @@ site/uploadPath = www.devboost.de:/home/jenkins/emftools/update_trunk
 site/usernameProperty = DEVBOOST_UPLOAD_USER
 site/passwordProperty = DEVBOOST_UPLOAD_PASS
 
-feature/de.devboost.emfcustomize/version = 0.5.1
-feature/org.emftext.language.emfdoc/version = 0.8.2
-feature/org.emftext.language.java.ejava/version = 1.2.2
-feature/org.emftext.language.mecore/version = 0.2.2
+site/version = 1.0.0

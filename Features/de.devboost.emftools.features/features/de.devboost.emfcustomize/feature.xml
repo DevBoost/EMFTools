@@ -3,7 +3,7 @@
       id="de.devboost.emfcustomize"
       label="EMFCustomize"
       version="0.0.0"
-      provider-name="DevBoost GmbH - Germany">
+      provider-name="DevBoost GmbH">
 
 	<description>EMFCustomize allows to implement operations for EMF Ecore models using the plain Eclipse Java JDT editor while preserving a clean separation between generated and hand-written code.</description>
 

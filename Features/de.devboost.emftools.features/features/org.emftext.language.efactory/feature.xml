@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <feature
-	id="org.emftext.language.emfdoc"
-	label="EMFDoc"
+	id="org.emftext.language.efactory"
+	label="EFactory"
 	provider-name="DevBoost GmbH"
 	version="0.0.0">
 
-   <description>EMFDoc can be used to document Ecore models.</description>
+   <description>EFactory is a generic language to create instances of arbitrary Ecore models. Textual models are automatically saved as XMI files by the EFactory builder.</description>
 
    <copyright>Copyright (c) 2006-2012 Software Technology Group, Dresden University of Technology, Germany; DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.</copyright>
 
@@ -29,16 +29,12 @@ Contributors:
 	 <import feature="org.emftext.commons.antlr3_4_0"/>
    </requires>
 
-   <plugin download-size="0" id="org.emftext.language.emfdoc" install-size="0" unpack="false" version="0.0.0"/>
+   <plugin download-size="0" id="org.emftext.language.efactory" install-size="0" unpack="false" version="0.0.0"/>
+         
+   <plugin download-size="0" id="org.emftext.language.efactory.resource.efactory" install-size="0" unpack="false" version="0.0.0"/>
 
-   <plugin download-size="0" id="org.emftext.language.emfdoc.constraints" install-size="0" unpack="false" version="0.0.0"/>
+   <plugin download-size="0" id="org.emftext.language.efactory.resource.efactory.ui" install-size="0" unpack="false" version="0.0.0"/>
 
-   <plugin download-size="0" id="org.emftext.language.emfdoc.edit" install-size="0" unpack="false" version="0.0.0"/>
-
-   <plugin download-size="0" id="org.emftext.language.emfdoc.resource.emfdoc" install-size="0" unpack="false" version="0.0.0"/>
-
-   <plugin download-size="0" id="org.emftext.language.emfdoc.resource.emfdoc.ui" install-size="0" unpack="false" version="0.0.0"/>
-
-   <plugin download-size="0" id="org.emftext.language.emfdoc.ui" install-size="0" unpack="false" version="0.0.0"/>
+   <plugin download-size="0" id="org.emftext.language.efactory.resource.efactory.post_processing" install-size="0" unpack="false" version="0.0.0"/>
 
 </feature>
