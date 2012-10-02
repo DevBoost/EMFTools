@@ -104,18 +104,29 @@ public class MecoreBuilder implements IMecoreBuilder {
 		}
 		reloadGeneratorModel(ecoreResource);
 		
+		runEcoreValidation(resource, ecoreResource, wrapper);
+		return org.eclipse.core.runtime.Status.OK_STATUS;
+	}
+
+	private void runEcoreValidation(MecoreResource mResource,
+			Resource eResource, MecoreWrapper wrapper) {
+		// do not validate if resource already contains errors (syntactical ones
+		// or ones that are detected by the Mecore validation).
+		if (!mResource.getErrors().isEmpty()) {
+			return;
+		}
+		
 		// run Ecore validation and map result back to .mecore file
 		Map<Object, Object> context = new LinkedHashMap<Object, Object>();
-		TreeIterator<EObject> allContents = ecoreResource.getAllContents();
+		TreeIterator<EObject> allContents = eResource.getAllContents();
 		while (allContents.hasNext()) {
 			EObject next = (EObject) allContents.next();
 			BasicDiagnostic diagnostics = new BasicDiagnostic();
 			boolean result = EcoreValidator.INSTANCE.validate(next, diagnostics, context);
 			if (!result) {
-				processDiagnostics(resource, wrapper, diagnostics);
+				processDiagnostics(mResource, wrapper, diagnostics);
 			}
 		}
-		return org.eclipse.core.runtime.Status.OK_STATUS;
 	}
 
 	/** 
