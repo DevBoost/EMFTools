@@ -72,9 +72,8 @@ public class MecoreWrapper {
 	private static final String COMMENT_VALUE = "This element was generated from an .mecore file. Removing this annotation will signal the MinimalEcore builder to keep this element.";
 
 	private Map<MModelElement, EObject> primaryMapping = new LinkedHashMap<MModelElement, EObject>();
-	// this mappings to used to trace validation errors that are detected in the
-	// Ecore model back to
-	// the Mecore model
+	// this mapping is to used to trace validation errors that are detected in 
+	// the Ecore model back to the Mecore model
 	private Map<EObject, MModelElement> reverseMapping = new LinkedHashMap<EObject, MModelElement>();
 
 	/**
