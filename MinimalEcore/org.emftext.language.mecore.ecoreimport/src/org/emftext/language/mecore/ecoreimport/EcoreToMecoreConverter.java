@@ -36,12 +36,22 @@ import org.emftext.language.mecore.MSimpleMultiplicityValue;
 import org.emftext.language.mecore.MType;
 import org.emftext.language.mecore.MecoreFactory;
 
+/**
+ * This is an experimental converter that takes Ecore models as input and 
+ * creates corresponding Mecore models. The implementation is incomplete,
+ * but can be used for simple Ecore models without sub packages, enumerations,
+ * generic types, operations, imports or super type references.
+ */
 public class EcoreToMecoreConverter {
 	
 	private MecoreFactory factory = MecoreFactory.eINSTANCE;
 	private Map<EClassifier, MType> eTypeToMTypeMap = new LinkedHashMap<EClassifier, MType>();
 	private List<Runnable> commands = new ArrayList<Runnable>();
 
+	/**
+	 * Transforms the given {@link EPackage} to an {@link MPackage} including
+	 * the classifiers that are contained in the package.
+	 */
 	public MPackage convert(EPackage ePackage) {
 		MPackage mPackage = factory.createMPackage();
 		mPackage.setName(ePackage.getName());
