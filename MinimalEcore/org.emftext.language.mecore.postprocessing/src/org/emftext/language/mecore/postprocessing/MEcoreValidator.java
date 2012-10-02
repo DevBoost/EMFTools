@@ -45,6 +45,10 @@ import org.emftext.language.mecore.resource.mecore.util.MecoreEObjectUtil;
 public class MEcoreValidator implements IMecoreOptionProvider, IMecoreResourcePostProcessorProvider, IMecoreResourcePostProcessor {
 
 	public void process(MecoreResource resource) {
+		// do not validate if resource contains syntactical errors
+		if (!resource.getErrors().isEmpty()) {
+			return;
+		}
 		List<EObject> internalContents = resource.getContentsInternal();
 		for (EObject eObject : internalContents) {
 			validateFeatureTypes(resource, eObject);
