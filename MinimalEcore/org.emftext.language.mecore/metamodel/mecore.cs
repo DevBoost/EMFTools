@@ -22,6 +22,7 @@ TOKENS {
 	DEFINE WHITESPACES $(' '|'\t'|'\f')+$;
 	DEFINE LINEBREAKS $('\r'|'\n')+$;
 	DEFINE COMMENT $'//'(~('\n'|'\r'))*$;
+	DEFINE ML_COMMENT $'/*'.*'*/'$;
 	DEFINE URI $'<' ($ + LOWER_CHAR + $|'.') ('a'..'z'|'0'..'9'|'A'..'Z'|'.'|':'|'/'|'_'|'%'|'-'|'?'|'&'|'='|'#')+'>'$;
 }
 
@@ -33,16 +34,21 @@ TOKENSTYLES {
 } 
 
 RULES {
-	MPackage ::= (name[LOWER] #1)? namespace[URI] (!0 imports)* (!0 contents)*;
+	MPackage ::= (name[LOWER] #1)? namespace[URI] 
+				 (!0 imports)* 
+				 !0 
+				 (!0 contents)*;
+				 
 	MImport  ::= "import" #1 importedPackage[URI] #1 "as" prefix[LOWER];
 
 	@SuppressWarnings(optionalKeyword)
-	MClass   ::= abstract["abstract" : ""] 
+	MClass   ::= comment[ML_COMMENT]?
+				 abstract["abstract" : ""] 
 				 interface["interface" : ""]
 	             name[UPPER]
 	             ("<" typeParameters ("," typeParameters)* ">")? 
 	             (":" superTypeReferences ("," superTypeReferences)* )? 
-	             ("(" (!1 features)* (!1 operations)* !0 ")")? !0;
+	             (#1 "(" (!1 features)* (!1 operations)* !0 ")")? !0;
 
 	MSuperTypeReference ::= 
 				(supertype[UPPER] | eSupertype[LOWER]) 
