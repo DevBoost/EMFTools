@@ -49,20 +49,33 @@ public class TypeResolver {
 		}
 		
 		if (!result.wasResolved() || resolveFuzzy) {
+			// search in imported packages
 			if (root instanceof MPackage) {
 				MPackage mPackage = (MPackage) root;
 				for (MImport mImport : mPackage.getImports()) {
 					EPackage ePackage = mImport.getImportedPackage();
 					String prefix = mImport.getPrefix() + ".";
-					for (EClassifier eClassifier : ePackage.getEClassifiers()) {
-						if (checkClassifier(identifier, resolveFuzzy, result, eClassifier, prefix)) {
-							return;
-						}
+					if (searchInEPackage(identifier, prefix, ePackage,
+							resolveFuzzy, result)) {
+						return;
 					}
-					// TODO handle nested packages
 				}
 			}
+			// search in Ecore package (imported by default)
+			searchInEPackage(identifier, "", EcorePackage.eINSTANCE, resolveFuzzy, result);
 		}
+	}
+
+	private boolean searchInEPackage(String identifier, String prefix,
+			EPackage ePackage, boolean resolveFuzzy,
+			final IMecoreReferenceResolveResult<MType> result) {
+		for (EClassifier eClassifier : ePackage.getEClassifiers()) {
+			if (checkClassifier(identifier, resolveFuzzy, result, eClassifier, prefix)) {
+				return true;
+			}
+		}
+		// TODO handle nested packages
+		return false;
 	}
 
 	private boolean checkClassifier(String identifier, boolean resolveFuzzy,
