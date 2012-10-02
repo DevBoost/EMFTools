@@ -25,10 +25,14 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.emftext.language.mecore.MClass;
+import org.emftext.language.mecore.MComplexMultiplicity;
 import org.emftext.language.mecore.MDataType;
 import org.emftext.language.mecore.MEcoreType;
 import org.emftext.language.mecore.MFeature;
+import org.emftext.language.mecore.MMultiplicity;
 import org.emftext.language.mecore.MPackage;
+import org.emftext.language.mecore.MSimpleMultiplicity;
+import org.emftext.language.mecore.MSimpleMultiplicityValue;
 import org.emftext.language.mecore.MType;
 import org.emftext.language.mecore.MecoreFactory;
 
@@ -97,9 +101,39 @@ public class EcoreToMecoreConverter {
 			}
 		});
 		
-		// TODO set multiplicity
+		setMultiplicity(mFeature, eFeature);
 		
 		mClass.getFeatures().add(mFeature);
+	}
+
+	private void setMultiplicity(final MFeature mFeature,
+			final EStructuralFeature eFeature) {
+		// set multiplicity
+		int lowerBound = eFeature.getLowerBound();
+		int upperBound = eFeature.getUpperBound();
+		MMultiplicity multiplicity;
+		if (lowerBound == 0 && upperBound == 1) {
+			MSimpleMultiplicity simpleMultiplicity = factory.createMSimpleMultiplicity();
+			simpleMultiplicity.setValue(MSimpleMultiplicityValue.OPTIONAL);
+			multiplicity = simpleMultiplicity;
+		} else if (lowerBound == 0 && upperBound == -1) {
+			MSimpleMultiplicity simpleMultiplicity = factory.createMSimpleMultiplicity();
+			simpleMultiplicity.setValue(MSimpleMultiplicityValue.STAR);
+			multiplicity = simpleMultiplicity;
+		} else if (lowerBound == 1 && upperBound == -1) {
+			MSimpleMultiplicity simpleMultiplicity = factory.createMSimpleMultiplicity();
+			simpleMultiplicity.setValue(MSimpleMultiplicityValue.PLUS);
+			multiplicity = simpleMultiplicity;
+		} else if (lowerBound == 1 && upperBound == 1) {
+			// 1..1 is default and represented as null
+			multiplicity = null;
+		} else {
+			MComplexMultiplicity complexMultiplicity = factory.createMComplexMultiplicity();
+			complexMultiplicity.setLowerBound(lowerBound);
+			complexMultiplicity.setUpperBound(upperBound);
+			multiplicity = complexMultiplicity;
+		}
+		mFeature.setMultiplicity(multiplicity);
 	}
 
 	private MType getMType(EClassifier eType) {
@@ -125,19 +159,23 @@ public class EcoreToMecoreConverter {
 		
 		EClass eObjectType = EcorePackage.eINSTANCE.getEObject();
 		if (eObjectType.equals(eType)) {
-			MEcoreType mEcoreType = factory.createMEcoreType();
-			mEcoreType.setEcoreType(eObjectType);
+			MEcoreType mEcoreType = toMEcoreType(eObjectType);
 			return mEcoreType;
 		}
 		
-		EClass eStringToStringMapEntry = EcorePackage.eINSTANCE.getEStringToStringMapEntry();
-		if (eStringToStringMapEntry.equals(eType)) {
-			MEcoreType mEcoreType = factory.createMEcoreType();
-			mEcoreType.setEcoreType(eStringToStringMapEntry);
+		EClass eStringToStringMapEntryType = EcorePackage.eINSTANCE.getEStringToStringMapEntry();
+		if (eStringToStringMapEntryType.equals(eType)) {
+			MEcoreType mEcoreType = toMEcoreType(eStringToStringMapEntryType);
 			return mEcoreType;
 		}
 		
-		System.out.println("Can't find type for " + eType);
-		return null;
+		System.out.println("Can't find type for " + eType + ". Using EObject instead.");
+		return toMEcoreType(eObjectType);
+	}
+
+	private MEcoreType toMEcoreType(EClass eClass) {
+		MEcoreType mEcoreType = factory.createMEcoreType();
+		mEcoreType.setEcoreType(eClass);
+		return mEcoreType;
 	}
 }
