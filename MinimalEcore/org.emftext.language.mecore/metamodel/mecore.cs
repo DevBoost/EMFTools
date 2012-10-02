@@ -33,8 +33,8 @@ TOKENSTYLES {
 } 
 
 RULES {
-	MPackage ::= (name[LOWER])? namespace[URI] (!0 imports)* (!0 contents)*;
-	MImport  ::= "import" importedPackage[URI] "as" prefix[LOWER];
+	MPackage ::= (name[LOWER] #1)? namespace[URI] (!0 imports)* (!0 contents)*;
+	MImport  ::= "import" #1 importedPackage[URI] #1 "as" prefix[LOWER];
 
 	@SuppressWarnings(optionalKeyword)
 	MClass   ::= abstract["abstract" : ""] 
@@ -42,7 +42,7 @@ RULES {
 	             name[UPPER]
 	             ("<" typeParameters ("," typeParameters)* ">")? 
 	             (":" superTypeReferences ("," superTypeReferences)* )? 
-	             ("(" features* operations* ")")? ;
+	             ("(" (!1 features)* (!1 operations)* !0 ")")? !0;
 
 	MSuperTypeReference ::= 
 				(supertype[UPPER] | eSupertype[LOWER]) 
