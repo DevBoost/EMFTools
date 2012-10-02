@@ -118,6 +118,9 @@ public class TypeResolver {
 		} else if (element instanceof MDataType) {
 			MDataType mDataType = (MDataType) element;
 			return mDataType.getEDataType().getName();
+		} else if (element instanceof MEcoreType) {
+			MEcoreType mEcoreType = (MEcoreType) element;
+			return mEcoreType.getEcoreType().getName();
 		}
 		return null;
 	}
