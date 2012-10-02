@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Ecoreimport
+Bundle-SymbolicName: org.emftext.language.mecore.ecoreimport
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.eclipse.emf.ecore,
+ org.emftext.language.mecore;visibility:=reexport
+Export-Package: org.emftext.language.mecore.ecoreimport
