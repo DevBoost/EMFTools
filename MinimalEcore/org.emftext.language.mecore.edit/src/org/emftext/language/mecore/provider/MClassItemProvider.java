@@ -87,10 +87,33 @@ public class MClassItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addCommentPropertyDescriptor(object);
 			addAbstractPropertyDescriptor(object);
 			addInterfacePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
+	}
+
+	/**
+	 * This adds a property descriptor for the Comment feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addCommentPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MCommentable_comment_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MCommentable_comment_feature", "_UI_MCommentable_type"),
+				 MecorePackage.Literals.MCOMMENTABLE__COMMENT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
 	}
 
 	/**
@@ -196,6 +219,7 @@ public class MClassItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(MClass.class)) {
+			case MecorePackage.MCLASS__COMMENT:
 			case MecorePackage.MCLASS__ABSTRACT:
 			case MecorePackage.MCLASS__INTERFACE:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));

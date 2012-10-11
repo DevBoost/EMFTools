@@ -85,6 +85,7 @@ public class MTypeParameterItemProvider
 			super.getPropertyDescriptors(object);
 
 			addNamePropertyDescriptor(object);
+			addLowerBoundPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -112,6 +113,29 @@ public class MTypeParameterItemProvider
 	}
 
 	/**
+	 * This adds a property descriptor for the Lower Bound feature.
+	 * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+	 * @generated
+	 */
+  protected void addLowerBoundPropertyDescriptor(Object object)
+  {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_MTypeParameter_lowerBound_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_MTypeParameter_lowerBound_feature", "_UI_MTypeParameter_type"),
+				 MecorePackage.Literals.MTYPE_PARAMETER__LOWER_BOUND,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+  /**
 	 * This returns MTypeParameter.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
