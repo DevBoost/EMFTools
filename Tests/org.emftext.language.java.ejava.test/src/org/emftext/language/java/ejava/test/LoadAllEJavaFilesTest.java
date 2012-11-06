@@ -25,6 +25,7 @@ import java.util.Map;
 
 import junit.framework.TestCase;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModelPackage;
 import org.eclipse.emf.common.util.EList;
@@ -37,6 +38,7 @@ import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jdt.core.IJavaProject;
 import org.emftext.language.java.JavaClasspath;
 import org.emftext.language.java.ejava.resource.ejava.IEjavaOptions;
 import org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMetaInformation;
@@ -85,6 +87,8 @@ public class LoadAllEJavaFilesTest extends TestCase {
 		javaClasspath.registerClassifierJar(URI.createURI(getJarPath(EClass.class)));
 		javaClasspath.registerClassifierJar(URI.createURI(getJarPath(EList.class)));
 		javaClasspath.registerClassifierJar(URI.createURI(getJarPath(GenClass.class)));
+		javaClasspath.registerClassifierJar(URI.createURI(getJarPath(IJavaProject.class)));
+		javaClasspath.registerClassifierJar(URI.createURI(getJarPath(IProject.class)));
 		javaClasspath.registerSourceOrClassFileFolder(URI.createFileURI("../org.emftext.language.java/src"));
 		// ***
 	}
