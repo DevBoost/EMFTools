@@ -58,151 +58,149 @@ public class EEnumLiteralWrapperItemProvider
     IItemPropertySource
 {
   /**
-   * This constructs an instance from a factory and a notifier.
-   * <!-- begin-user-doc -->
+	 * This constructs an instance from a factory and a notifier.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public EEnumLiteralWrapperItemProvider(AdapterFactory adapterFactory)
   {
-    super(adapterFactory);
-  }
+		super(adapterFactory);
+	}
 
   /**
-   * This returns the property descriptors for the adapted class.
-   * <!-- begin-user-doc -->
+	 * This returns the property descriptors for the adapted class.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
   {
-    if (itemPropertyDescriptors == null)
-    {
-      super.getPropertyDescriptors(object);
+		if (itemPropertyDescriptors == null) {
+			super.getPropertyDescriptors(object);
 
-      addEEnumLiteralPropertyDescriptor(object);
-    }
-    return itemPropertyDescriptors;
-  }
+			addEEnumLiteralPropertyDescriptor(object);
+		}
+		return itemPropertyDescriptors;
+	}
 
   /**
-   * This adds a property descriptor for the EEnum Literal feature.
-   * <!-- begin-user-doc -->
+	 * This adds a property descriptor for the EEnum Literal feature.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected void addEEnumLiteralPropertyDescriptor(Object object)
   {
-    itemPropertyDescriptors.add
-      (createItemPropertyDescriptor
-        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-         getResourceLocator(),
-         getString("_UI_EEnumLiteralWrapper_eEnumLiteral_feature"),
-         getString("_UI_PropertyDescriptor_description", "_UI_EEnumLiteralWrapper_eEnumLiteral_feature", "_UI_EEnumLiteralWrapper_type"),
-         EjavaPackage.Literals.EENUM_LITERAL_WRAPPER__EENUM_LITERAL,
-         true,
-         false,
-         true,
-         null,
-         null,
-         null));
-  }
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EEnumLiteralWrapper_eEnumLiteral_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EEnumLiteralWrapper_eEnumLiteral_feature", "_UI_EEnumLiteralWrapper_type"),
+				 EjavaPackage.Literals.EENUM_LITERAL_WRAPPER__EENUM_LITERAL,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
 
   /**
-   * This returns EEnumLiteralWrapper.gif.
-   * <!-- begin-user-doc -->
+	 * This returns EEnumLiteralWrapper.gif.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object getImage(Object object)
   {
-    return overlayImage(object, getResourceLocator().getImage("full/obj16/EEnumLiteralWrapper"));
-  }
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/EEnumLiteralWrapper"));
+	}
 
   /**
-   * This returns the label text for the adapted class.
-   * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String getText(Object object)
   {
-    String label = ((EEnumLiteralWrapper)object).getName();
-    return label == null || label.length() == 0 ?
-      getString("_UI_EEnumLiteralWrapper_type") :
-      getString("_UI_EEnumLiteralWrapper_type") + " " + label;
-  }
+		String label = ((EEnumLiteralWrapper)object).getName();
+		return label == null || label.length() == 0 ?
+			getString("_UI_EEnumLiteralWrapper_type") :
+			getString("_UI_EEnumLiteralWrapper_type") + " " + label;
+	}
 
   /**
-   * This handles model notifications by calling {@link #updateChildren} to update any cached
-   * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-   * <!-- begin-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void notifyChanged(Notification notification)
   {
-    updateChildren(notification);
-    super.notifyChanged(notification);
-  }
+		updateChildren(notification);
+		super.notifyChanged(notification);
+	}
 
   /**
-   * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-   * that can be created under this object.
-   * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
   {
-    super.collectNewChildDescriptors(newChildDescriptors, object);
+		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add
-      (createChildParameter
-        (ReferencesPackage.Literals.ARGUMENTABLE__ARGUMENTS,
-         EjavaFactory.eINSTANCE.createEObjectInstantiation()));
-  }
+		newChildDescriptors.add
+			(createChildParameter
+				(ReferencesPackage.Literals.ARGUMENTABLE__ARGUMENTS,
+				 EjavaFactory.eINSTANCE.createEObjectInstantiation()));
+	}
 
   /**
-   * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-   * <!-- begin-user-doc -->
+	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection)
   {
-    Object childFeature = feature;
-    Object childObject = child;
+		Object childFeature = feature;
+		Object childObject = child;
 
-    boolean qualify =
-      childFeature == ReferencesPackage.Literals.ARGUMENTABLE__ARGUMENTS ||
-      childFeature == AnnotationsPackage.Literals.ANNOTABLE__ANNOTATIONS;
+		boolean qualify =
+			childFeature == ReferencesPackage.Literals.ARGUMENTABLE__ARGUMENTS ||
+			childFeature == AnnotationsPackage.Literals.ANNOTABLE__ANNOTATIONS;
 
-    if (qualify)
-    {
-      return getString
-        ("_UI_CreateChild_text2",
-         new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-    }
-    return super.getCreateChildText(owner, feature, child, selection);
-  }
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
+	}
 
   /**
-   * Return the resource locator for this item provider's resources.
-   * <!-- begin-user-doc -->
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ResourceLocator getResourceLocator()
   {
-    return EjavaEditPlugin.INSTANCE;
-  }
+		return EjavaEditPlugin.INSTANCE;
+	}
 
 }

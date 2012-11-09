@@ -52,8 +52,8 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	 * @generated
 	 */
 	public EPackageWrapperItemProvider(AdapterFactory adapterFactory) {
-    super(adapterFactory);
-  }
+		super(adapterFactory);
+	}
 
 	/**
 	 * This returns the property descriptors for the adapted class. <!--
@@ -63,15 +63,14 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-    if (itemPropertyDescriptors == null)
-    {
-      super.getPropertyDescriptors(object);
+		if (itemPropertyDescriptors == null) {
+			super.getPropertyDescriptors(object);
 
-      addEPackagePropertyDescriptor(object);
-      addGenPackagePropertyDescriptor(object);
-    }
-    return itemPropertyDescriptors;
-  }
+			addEPackagePropertyDescriptor(object);
+			addGenPackagePropertyDescriptor(object);
+		}
+		return itemPropertyDescriptors;
+	}
 
 	/**
 	 * This adds a property descriptor for the EPackage feature. <!--
@@ -80,20 +79,20 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	 * @generated
 	 */
 	protected void addEPackagePropertyDescriptor(Object object) {
-    itemPropertyDescriptors.add
-      (createItemPropertyDescriptor
-        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-         getResourceLocator(),
-         getString("_UI_EPackageWrapper_ePackage_feature"),
-         getString("_UI_PropertyDescriptor_description", "_UI_EPackageWrapper_ePackage_feature", "_UI_EPackageWrapper_type"),
-         EjavaPackage.Literals.EPACKAGE_WRAPPER__EPACKAGE,
-         true,
-         false,
-         true,
-         null,
-         null,
-         null));
-  }
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EPackageWrapper_ePackage_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EPackageWrapper_ePackage_feature", "_UI_EPackageWrapper_type"),
+				 EjavaPackage.Literals.EPACKAGE_WRAPPER__EPACKAGE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
 
 	/**
 	 * This adds a property descriptor for the Gen Package feature. <!--
@@ -102,20 +101,20 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	 * @generated
 	 */
 	protected void addGenPackagePropertyDescriptor(Object object) {
-    itemPropertyDescriptors.add
-      (createItemPropertyDescriptor
-        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-         getResourceLocator(),
-         getString("_UI_EPackageWrapper_genPackage_feature"),
-         getString("_UI_PropertyDescriptor_description", "_UI_EPackageWrapper_genPackage_feature", "_UI_EPackageWrapper_type"),
-         EjavaPackage.Literals.EPACKAGE_WRAPPER__GEN_PACKAGE,
-         true,
-         false,
-         true,
-         null,
-         null,
-         null));
-  }
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EPackageWrapper_genPackage_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EPackageWrapper_genPackage_feature", "_UI_EPackageWrapper_type"),
+				 EjavaPackage.Literals.EPACKAGE_WRAPPER__GEN_PACKAGE,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
 
 	/**
 	 * This returns EPackageWrapper.gif. <!-- begin-user-doc --> <!--
@@ -145,17 +144,17 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	}
 
 	/**
-   * This handles model notifications by calling {@link #updateChildren} to update any cached
-   * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-   * <!-- begin-user-doc --> <!--
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
-    updateChildren(notification);
-    super.notifyChanged(notification);
-  }
+		updateChildren(notification);
+		super.notifyChanged(notification);
+	}
 
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s
@@ -167,23 +166,23 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	@Override
 	protected void collectNewChildDescriptors(
 			Collection<Object> newChildDescriptors, Object object) {
-    super.collectNewChildDescriptors(newChildDescriptors, object);
+		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add
-      (createChildParameter
-        (ContainersPackage.Literals.COMPILATION_UNIT__CLASSIFIERS,
-         EjavaFactory.eINSTANCE.createEClassifierClassWrapper()));
+		newChildDescriptors.add
+			(createChildParameter
+				(ContainersPackage.Literals.COMPILATION_UNIT__CLASSIFIERS,
+				 EjavaFactory.eINSTANCE.createEClassifierClassWrapper()));
 
-    newChildDescriptors.add
-      (createChildParameter
-        (ContainersPackage.Literals.COMPILATION_UNIT__CLASSIFIERS,
-         EjavaFactory.eINSTANCE.createEClassifierInterfaceWrapper()));
+		newChildDescriptors.add
+			(createChildParameter
+				(ContainersPackage.Literals.COMPILATION_UNIT__CLASSIFIERS,
+				 EjavaFactory.eINSTANCE.createEClassifierInterfaceWrapper()));
 
-    newChildDescriptors.add
-      (createChildParameter
-        (ContainersPackage.Literals.COMPILATION_UNIT__CLASSIFIERS,
-         EjavaFactory.eINSTANCE.createEClassifierEnumerationWrapper()));
-  }
+		newChildDescriptors.add
+			(createChildParameter
+				(ContainersPackage.Literals.COMPILATION_UNIT__CLASSIFIERS,
+				 EjavaFactory.eINSTANCE.createEClassifierEnumerationWrapper()));
+	}
 
 	/**
 	 * Return the resource locator for this item provider's resources. <!--
@@ -193,7 +192,7 @@ public class EPackageWrapperItemProvider extends CompilationUnitItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-    return EjavaEditPlugin.INSTANCE;
-  }
+		return EjavaEditPlugin.INSTANCE;
+	}
 
 }

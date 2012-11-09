@@ -55,8 +55,8 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	 * @generated
 	 */
 	public EOperationWrapperItemProvider(AdapterFactory adapterFactory) {
-    super(adapterFactory);
-  }
+		super(adapterFactory);
+	}
 
 	/**
 	 * This returns the property descriptors for the adapted class. <!--
@@ -66,14 +66,13 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	 */
 	@Override
 	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
-    if (itemPropertyDescriptors == null)
-    {
-      super.getPropertyDescriptors(object);
+		if (itemPropertyDescriptors == null) {
+			super.getPropertyDescriptors(object);
 
-      addEOperationPropertyDescriptor(object);
-    }
-    return itemPropertyDescriptors;
-  }
+			addEOperationPropertyDescriptor(object);
+		}
+		return itemPropertyDescriptors;
+	}
 
 	/**
 	 * This adds a property descriptor for the EOperation feature. <!--
@@ -82,20 +81,20 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	 * @generated
 	 */
 	protected void addEOperationPropertyDescriptor(Object object) {
-    itemPropertyDescriptors.add
-      (createItemPropertyDescriptor
-        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-         getResourceLocator(),
-         getString("_UI_EOperationWrapper_eOperation_feature"),
-         getString("_UI_PropertyDescriptor_description", "_UI_EOperationWrapper_eOperation_feature", "_UI_EOperationWrapper_type"),
-         EjavaPackage.Literals.EOPERATION_WRAPPER__EOPERATION,
-         true,
-         false,
-         true,
-         null,
-         null,
-         null));
-  }
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_EOperationWrapper_eOperation_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_EOperationWrapper_eOperation_feature", "_UI_EOperationWrapper_type"),
+				 EjavaPackage.Literals.EOPERATION_WRAPPER__EOPERATION,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
 
 	/**
 	 * This returns EOperationWrapper.gif. <!-- begin-user-doc --> <!--
@@ -122,17 +121,17 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	}
 
 	/**
-   * This handles model notifications by calling {@link #updateChildren} to update any cached
-   * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-   * <!-- begin-user-doc --> <!--
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
 	@Override
 	public void notifyChanged(Notification notification) {
-    updateChildren(notification);
-    super.notifyChanged(notification);
-  }
+		updateChildren(notification);
+		super.notifyChanged(notification);
+	}
 
 	/**
 	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s
@@ -144,23 +143,23 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	@Override
 	protected void collectNewChildDescriptors(
 			Collection<Object> newChildDescriptors, Object object) {
-    super.collectNewChildDescriptors(newChildDescriptors, object);
+		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-    newChildDescriptors.add
-      (createChildParameter
-        (StatementsPackage.Literals.STATEMENT_LIST_CONTAINER__STATEMENTS,
-         EjavaFactory.eINSTANCE.createEClassifierClassWrapper()));
+		newChildDescriptors.add
+			(createChildParameter
+				(StatementsPackage.Literals.STATEMENT_LIST_CONTAINER__STATEMENTS,
+				 EjavaFactory.eINSTANCE.createEClassifierClassWrapper()));
 
-    newChildDescriptors.add
-      (createChildParameter
-        (StatementsPackage.Literals.STATEMENT_LIST_CONTAINER__STATEMENTS,
-         EjavaFactory.eINSTANCE.createEClassifierInterfaceWrapper()));
+		newChildDescriptors.add
+			(createChildParameter
+				(StatementsPackage.Literals.STATEMENT_LIST_CONTAINER__STATEMENTS,
+				 EjavaFactory.eINSTANCE.createEClassifierInterfaceWrapper()));
 
-    newChildDescriptors.add
-      (createChildParameter
-        (StatementsPackage.Literals.STATEMENT_LIST_CONTAINER__STATEMENTS,
-         EjavaFactory.eINSTANCE.createEClassifierEnumerationWrapper()));
-  }
+		newChildDescriptors.add
+			(createChildParameter
+				(StatementsPackage.Literals.STATEMENT_LIST_CONTAINER__STATEMENTS,
+				 EjavaFactory.eINSTANCE.createEClassifierEnumerationWrapper()));
+	}
 
 	/**
 	 * This returns the label text for
@@ -172,23 +171,22 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	@Override
 	public String getCreateChildText(Object owner, Object feature,
 			Object child, Collection<?> selection) {
-    Object childFeature = feature;
-    Object childObject = child;
+		Object childFeature = feature;
+		Object childObject = child;
 
-    boolean qualify =
-      childFeature == TypesPackage.Literals.TYPED_ELEMENT__TYPE_REFERENCE ||
-      childFeature == MembersPackage.Literals.EXCEPTION_THROWER__EXCEPTIONS ||
-      childFeature == ArraysPackage.Literals.ARRAY_TYPEABLE__ARRAY_DIMENSIONS_BEFORE ||
-      childFeature == ArraysPackage.Literals.ARRAY_TYPEABLE__ARRAY_DIMENSIONS_AFTER;
+		boolean qualify =
+			childFeature == TypesPackage.Literals.TYPED_ELEMENT__TYPE_REFERENCE ||
+			childFeature == MembersPackage.Literals.EXCEPTION_THROWER__EXCEPTIONS ||
+			childFeature == ArraysPackage.Literals.ARRAY_TYPEABLE__ARRAY_DIMENSIONS_BEFORE ||
+			childFeature == ArraysPackage.Literals.ARRAY_TYPEABLE__ARRAY_DIMENSIONS_AFTER;
 
-    if (qualify)
-    {
-      return getString
-        ("_UI_CreateChild_text2",
-         new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-    }
-    return super.getCreateChildText(owner, feature, child, selection);
-  }
+		if (qualify) {
+			return getString
+				("_UI_CreateChild_text2",
+				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
+		}
+		return super.getCreateChildText(owner, feature, child, selection);
+	}
 
 	/**
 	 * Return the resource locator for this item provider's resources. <!--
@@ -198,7 +196,7 @@ public class EOperationWrapperItemProvider extends ClassMethodItemProvider
 	 */
 	@Override
 	public ResourceLocator getResourceLocator() {
-    return EjavaEditPlugin.INSTANCE;
-  }
+		return EjavaEditPlugin.INSTANCE;
+	}
 
 }
