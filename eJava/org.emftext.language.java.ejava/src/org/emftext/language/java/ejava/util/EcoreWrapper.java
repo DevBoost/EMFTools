@@ -126,7 +126,9 @@ public class EcoreWrapper {
 		Resource wrapperResource = null;
 		JavaClasspath cp = JavaClasspath.get(mainEPackageWrapper);
 		String packageName = "";
-		for(String s : namespaces) { packageName += s + "."; }
+		for	(String namespace : namespaces) {
+			packageName += namespace + ".";
+		}
 
 		if (mainEPackageWrapper.getNamespaces().equals(namespaces)) {
 			wrapper = mainEPackageWrapper;
@@ -154,6 +156,10 @@ public class EcoreWrapper {
 				wrapper.setEPackage(genPackage.getEcorePackage());
 			}
 			wrapEClassifier(eClassifier, wrapper);
+			if (wrapperResource == null) {
+				// TODO log error message?
+				return;
+			}
 			cp.registerClassifier(packageName, eClassifier.getName(), wrapperResource.getURI());
 		}
 	}
