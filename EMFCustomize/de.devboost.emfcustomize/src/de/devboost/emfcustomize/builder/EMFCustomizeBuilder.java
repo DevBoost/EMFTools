@@ -101,10 +101,9 @@ public class EMFCustomizeBuilder {
 			GenClass genClass = genClasses.get(0);
 			
 			//propagate EOperations
-			GenPackage genPackage = genModel.getGenPackages().get(0);
+			GenPackage genPackage = genClass.getGenPackage();
 			
-			new EcoreModelRefactorer().propagateEOperations((JavaResource) resource, 
-					genPackage.getEcorePackage());
+			new EcoreModelRefactorer().propagateEOperations((JavaResource) resource, genClass);
 			genModel.reconcile();
 			try {
 				Resource ecoreModelResource = genPackage.getEcorePackage().eResource();

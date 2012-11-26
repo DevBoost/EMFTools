@@ -21,6 +21,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
+import org.eclipse.emf.codegen.ecore.genmodel.GenPackage;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
@@ -49,14 +51,15 @@ import org.emftext.language.java.types.TypeReference;
 
 public class EcoreModelRefactorer {
 	
-	public void propagateEOperations(JavaResource resource,
-			EPackage ePackage) {
+	public void propagateEOperations(JavaResource resource, GenClass genClass) {
+		GenPackage genPackage = genClass.getGenPackage();
+		EPackage ePackage = genPackage.getEcorePackage();
 		if (resource.getContents().isEmpty() || !(resource.getContents().get(0) instanceof CompilationUnit)) {
 			return;
 		}
 		CompilationUnit cu = (CompilationUnit) resource.getContents().get(0);
 		Class customClass = (Class) cu.getClassifiers().get(0);
-		EClass eClass = (EClass) eClassifierForCustomClass(customClass, null, ePackage);
+		EClass eClass = genClass.getEcoreClass();
 
 		if (eClass == null) {
 			return;
