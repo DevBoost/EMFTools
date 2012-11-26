@@ -21,6 +21,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.codegen.ecore.genmodel.GenPackage;
 import org.eclipse.emf.common.util.BasicEList;
@@ -43,6 +48,7 @@ import org.emftext.language.java.types.ClassifierReference;
 import org.emftext.language.java.types.NamespaceClassifierReference;
 import org.emftext.language.java.types.Type;
 import org.emftext.language.java.types.TypesFactory;
+import org.osgi.framework.Bundle;
 
 public class GeneratedFactoryRefactorer {
 
@@ -195,7 +201,53 @@ public class GeneratedFactoryRefactorer {
 		return cu.getClassifiers().get(0);
 	}
 	
-	private void prepareCompilationUnit(CompilationUnit cu, Class superClass) {
+	public ConcreteClassifier createInitialCustomClass(GenClass genClass) {
+		GenModel genModel = genClass.getGenModel();
+		String modelPluginID = genModel.getModelPluginID();
+		String name = genClass.getName();
+		GenPackage genPackage = genClass.getGenPackage();
+		String qualifiedPackageName = genPackage.getQualifiedPackageName();
+		String path = genModel.getModelDirectory();
+		int indexEnd = path.indexOf(modelPluginID) + modelPluginID.length();
+		String srcFolder = path.substring(indexEnd + 1);
+		URI uri = null;
+		if("src".equals(srcFolder)){
+			uri = URI.createPlatformResourceURI(path, true);
+		} else {
+			uri = URI.createPlatformResourceURI("/" + modelPluginID, true).appendSegment("src");
+		}
+		List<String> segments = new ArrayList<String>();
+		for (String segment : qualifiedPackageName.split("\\.")) {
+			segments.add(segment);
+		}
+		segments.add(CUSTOM_SUB_PACKAGE);
+		String customClassName = name + CUSTOM_CLASS_SUFFIX;
+		segments.add(customClassName);
+		
+		uri = uri.appendSegments(segments.toArray(new String[0])).appendFileExtension("java");
+		ResourceSet resourceSet = genClass.eResource().getResourceSet();
+		Resource customClassResource = resourceSet.createResource(uri);
+		
+		CompilationUnit cu = generateCompilationUnit(segments);
+		customClassResource.getContents().add(cu);
+		String qualifiedSuperClassName = genClass.getQualifiedClassName();
+		URI superClassUri = URI.createPlatformResourceURI(path, true);
+		superClassUri = superClassUri.appendSegments(qualifiedSuperClassName.split("\\.")).appendFileExtension("java");
+		Resource superClassResource = resourceSet.getResource(superClassUri, true);
+		CompilationUnit scCompUnit = (CompilationUnit) superClassResource.getContents().get(0);
+		Class superClass = (Class) scCompUnit.getConcreteClassifier(qualifiedSuperClassName);
+		
+		Class customClass = prepareCompilationUnit(cu, superClass);
+		try {
+			customClassResource.save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return customClass;
+	}
+	
+	private Class prepareCompilationUnit(CompilationUnit cu, Class superClass) {
 		Class clazz = (Class) cu.getClassifiers().get(0);
 		ClassifierReference tr = TypesFactory.eINSTANCE.createClassifierReference();
 		tr.setTarget(superClass);
@@ -204,6 +256,7 @@ public class GeneratedFactoryRefactorer {
 		classifierImport.getNamespaces().addAll(superClass.getContainingCompilationUnit().getNamespaces());
 		classifierImport.setClassifier(superClass);
 		cu.getImports().add(classifierImport);
+		return clazz;
 	}
 
 	private CompilationUnit generateCompilationUnit(List<String> fullName) {
@@ -217,4 +270,5 @@ public class GeneratedFactoryRefactorer {
 		
 		return cu;
 	}
+
 }
