@@ -58,12 +58,19 @@ public class EjavaBuilderAdapter extends org.eclipse.core.resources.IncrementalP
 	}
 	
 	public void build(org.eclipse.core.resources.IFile resource, org.eclipse.emf.ecore.resource.ResourceSet resourceSet, org.eclipse.core.runtime.IProgressMonitor monitor) {
-		org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-		org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder builder = getBuilder();
-		if (builder.isBuildingNeeded(uri)) {
-			org.emftext.language.java.ejava.resource.ejava.mopp.EjavaResource customResource = (org.emftext.language.java.ejava.resource.ejava.mopp.EjavaResource) resourceSet.getResource(uri, true);
-			new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMarkerHelper().removeAllMarkers(resource, getBuilderMarkerId());
-			builder.build(customResource, monitor);
+		// we must catch exception to avoid problem with the build process if
+		// something goes wrong with eJava
+		try {
+			org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+			org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder builder = getBuilder();
+			if (builder.isBuildingNeeded(uri)) {
+				org.emftext.language.java.ejava.resource.ejava.mopp.EjavaResource customResource = (org.emftext.language.java.ejava.resource.ejava.mopp.EjavaResource) resourceSet.getResource(uri, true);
+				new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMarkerHelper().removeAllMarkers(resource, getBuilderMarkerId());
+				builder.build(customResource, monitor);
+			}
+		} catch (Throwable e) {
+			// TODO: handle exception
+			e.printStackTrace();
 		}
 	}
 	
