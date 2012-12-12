@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.codegen.ecore.genmodel.GenPackage;
 import org.eclipse.emf.common.util.BasicEList;
@@ -48,7 +49,7 @@ public class GeneratedFactoryRefactorer {
 
 	public static String CUSTOM_CLASS_SUFFIX = "Custom";
 	public static String CUSTOM_SUB_PACKAGE = "custom";
-	
+
 	public static String FACTORY_CLASS_SUFFIX = "FactoryImpl";
 
 	public List<Resource> refactorFactory(URI genModelURI, URI baseURI, boolean createMissingCustomClasses, ResourceSet resourceSet) {
@@ -58,7 +59,7 @@ public class GeneratedFactoryRefactorer {
 		} catch (Exception e) {	
 			e.printStackTrace();
 		}
-		
+
 		if (resource == null) {
 			return Collections.emptyList();
 		}
@@ -69,23 +70,33 @@ public class GeneratedFactoryRefactorer {
 			return Collections.emptyList();
 		}
 		GenModel genModel = (GenModel) resource.getContents().get(0);
-		return refactorFactory(genModel, baseURI, createMissingCustomClasses);
+		return refactorFactory(genModel, null, baseURI, createMissingCustomClasses);
 	}
 
-	public List<Resource> refactorFactory(GenModel genModel, URI baseURI, boolean createMissingCustomClasses) {
+	public List<Resource> refactorFactory(GenModel genModel, GenClass genClass, URI baseURI, boolean createMissingCustomClasses) {
 		ResourceSet resourceSet = genModel.eResource().getResourceSet();
-		GenPackage genPackage = genModel.getGenPackages().get(0);
-		String baseFolder = "";
-		if (genPackage.getBasePackage() != null) {
-			baseFolder = genPackage.getBasePackage().replace('.', '/');
+		URI uri = null;
+		String modelDirectory = genModel.getModelDirectory();
+		if(genModel != null && genClass != null){
+			GenPackage genPackage = genClass.getGenPackage();
+			String factoryClassName = genPackage.getQualifiedFactoryClassName();
+			String uriString = modelDirectory + "/" + factoryClassName.replaceAll("\\.", "/") + ".java";
+			uri = URI.createPlatformResourceURI(uriString, true);
+		} else {
+			// old impl
+			GenPackage genPackage = genModel.getGenPackages().get(0);
+			String baseFolder = "";
+			if (genPackage.getBasePackage() != null) {
+				baseFolder = genPackage.getBasePackage().replace('.', '/');
+			}
+			String factoryImplementationFile = modelDirectory + "/" + 
+					baseFolder + "/" + genPackage.getEcorePackage().getName() + "/impl/" + 
+					genPackage.getFactoryClassName() + ".java";
+			if (factoryImplementationFile.startsWith("/") && baseURI.toString().endsWith("/")) {
+				factoryImplementationFile = factoryImplementationFile.substring(1);
+			}
+			uri = URI.createURI(baseURI.toString() + factoryImplementationFile);
 		}
-		String factoryImplementationFile = genModel.getModelDirectory() + "/" + 
-				baseFolder + "/" + genPackage.getEcorePackage().getName() + "/impl/" + 
-				genPackage.getFactoryClassName() + ".java";
-		if (factoryImplementationFile.startsWith("/") && baseURI.toString().endsWith("/")) {
-			factoryImplementationFile = factoryImplementationFile.substring(1);
-		}
-		URI uri = URI.createURI(baseURI.toString() + factoryImplementationFile);
 		Resource factoryImplementation = null;
 		try {
 			factoryImplementation = resourceSet.getResource(uri, true);
@@ -93,14 +104,14 @@ public class GeneratedFactoryRefactorer {
 			// TODO handle this exception more gracefully
 			e.printStackTrace();
 		}
-		
+
 		if (factoryImplementation != null) {
 			return refactorFactory(factoryImplementation, createMissingCustomClasses);
 		}
 		return Collections.emptyList();
 	}
 
-	
+
 	private List<Resource> refactorFactory(Resource factoryImplementation, boolean createMissingCustomClasses) {
 		boolean customPackageImported = false;
 		boolean customClassFound = false;
@@ -168,13 +179,13 @@ public class GeneratedFactoryRefactorer {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return createdClasses;
 	}
 
 	public ConcreteClassifier createInitialCustomClass(
 			List<String> customNameSegments, Class generatedImplementation, URI relativeURI) {
-		
+
 		ResourceSet resourceSet = generatedImplementation.eResource().getResourceSet();
 		URI javaClassURI = relativeURI.trimSegments(customNameSegments.size() + 1);
 		javaClassURI = javaClassURI.appendSegment("src");
@@ -183,19 +194,65 @@ public class GeneratedFactoryRefactorer {
 		Resource customClassResource = resourceSet.createResource(javaClassURI);
 		CompilationUnit cu = generateCompilationUnit(customNameSegments);
 		customClassResource.getContents().add(cu);
-		
+
 		prepareCompilationUnit(cu, generatedImplementation);
-				
+
 		try {
 			customClassResource.save(null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return cu.getClassifiers().get(0);
 	}
-	
-	private void prepareCompilationUnit(CompilationUnit cu, Class superClass) {
+
+	public ConcreteClassifier createInitialCustomClass(GenClass genClass) {
+		GenModel genModel = genClass.getGenModel();
+		String modelPluginID = genModel.getModelPluginID();
+		String name = genClass.getName();
+		GenPackage genPackage = genClass.getGenPackage();
+		String qualifiedPackageName = genPackage.getQualifiedPackageName();
+		String path = genModel.getModelDirectory();
+		int indexEnd = path.indexOf(modelPluginID) + modelPluginID.length();
+		String srcFolder = path.substring(indexEnd + 1);
+		URI uri = null;
+		if("src".equals(srcFolder)){
+			uri = URI.createPlatformResourceURI(path, true);
+		} else {
+			uri = URI.createPlatformResourceURI("/" + modelPluginID, true).appendSegment("src");
+		}
+		List<String> segments = new ArrayList<String>();
+		for (String segment : qualifiedPackageName.split("\\.")) {
+			segments.add(segment);
+		}
+		segments.add(CUSTOM_SUB_PACKAGE);
+		String customClassName = name + CUSTOM_CLASS_SUFFIX;
+		segments.add(customClassName);
+
+		uri = uri.appendSegments(segments.toArray(new String[0])).appendFileExtension("java");
+		ResourceSet resourceSet = genClass.eResource().getResourceSet();
+		Resource customClassResource = resourceSet.createResource(uri);
+
+		CompilationUnit cu = generateCompilationUnit(segments);
+		customClassResource.getContents().add(cu);
+		String qualifiedSuperClassName = genClass.getQualifiedClassName();
+		URI superClassUri = URI.createPlatformResourceURI(path, true);
+		superClassUri = superClassUri.appendSegments(qualifiedSuperClassName.split("\\.")).appendFileExtension("java");
+		Resource superClassResource = resourceSet.getResource(superClassUri, true);
+		CompilationUnit scCompUnit = (CompilationUnit) superClassResource.getContents().get(0);
+		Class superClass = (Class) scCompUnit.getConcreteClassifier(qualifiedSuperClassName);
+
+		Class customClass = prepareCompilationUnit(cu, superClass);
+		try {
+			customClassResource.save(null);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return customClass;
+	}
+
+	private Class prepareCompilationUnit(CompilationUnit cu, Class superClass) {
 		Class clazz = (Class) cu.getClassifiers().get(0);
 		ClassifierReference tr = TypesFactory.eINSTANCE.createClassifierReference();
 		tr.setTarget(superClass);
@@ -204,17 +261,19 @@ public class GeneratedFactoryRefactorer {
 		classifierImport.getNamespaces().addAll(superClass.getContainingCompilationUnit().getNamespaces());
 		classifierImport.setClassifier(superClass);
 		cu.getImports().add(classifierImport);
+		return clazz;
 	}
 
 	private CompilationUnit generateCompilationUnit(List<String> fullName) {
 		CompilationUnit cu = ContainersFactory.eINSTANCE.createCompilationUnit();
 		cu.getNamespaces().addAll(fullName.subList(0, fullName.size() - 1));
-		
+
 		Class clazz = ClassifiersFactory.eINSTANCE.createClass();
 		clazz.setName(fullName.get(fullName.size() - 1));
 		clazz.getAnnotationsAndModifiers().add(ModifiersFactory.eINSTANCE.createPublic());
 		cu.getClassifiers().add(clazz);
-		
+
 		return cu;
 	}
+
 }

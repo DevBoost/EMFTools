@@ -28,8 +28,10 @@ import org.eclipse.core.resources.IResourceVisitor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenModel;
 import org.eclipse.emf.codegen.ecore.genmodel.GenPackage;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -86,10 +88,22 @@ public class EMFCustomizeBuilder {
 		}
 		
 		if (isCustomCodeFile(resource.getURI())) {
+			// new strategy: adjust factory only when a custom class file is built for having the chance to determine which GenClass is needed
+			String className = iFile.getFullPath().removeFileExtension().lastSegment();
+			int index = className.indexOf(GeneratedFactoryRefactorer.CUSTOM_CLASS_SUFFIX);
+			if(index != -1){
+				className = className.substring(0, index);
+			}
+			List<GenClass> genClasses = getGenClassByName(genModel, className);
+			if(genClasses.size() > 1){
+				return Collections.emptyList();
+			}
+			GenClass genClass = genClasses.get(0);
+			
 			//propagate EOperations
-			GenPackage genPackage = genModel.getGenPackages().get(0);
-			new EcoreModelRefactorer().propagateEOperations((JavaResource) resource, 
-					genPackage.getEcorePackage());
+			GenPackage genPackage = genClass.getGenPackage();
+			
+			new EcoreModelRefactorer().propagateEOperations((JavaResource) resource, genClass);
 			genModel.reconcile();
 			try {
 				Resource ecoreModelResource = genPackage.getEcorePackage().eResource();
@@ -99,23 +113,44 @@ public class EMFCustomizeBuilder {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			return Collections.emptyList();
-		} else {
-			//adjust factory for generation gap pattern
-			IJavaProject javaProject = JavaCore.create(iFile.getProject());
-			try {
-				for (IClasspathEntry cpEntry : javaProject.getRawClasspath()) {
-					if (cpEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
-						//to register newly generated code;
-						updateClaspath(new File(iFile.getWorkspace().getRoot().getLocation().toString() + 
-								cpEntry.getPath().toString()), "", resourceSet);
-					}
+			// adjust factory
+			adjustFactory(iFile, resourceSet);
+			return new GeneratedFactoryRefactorer().refactorFactory(genModel, genClass, URI.createPlatformResourceURI("/", true), false);
+//			return Collections.emptyList();
+		} 
+//		else {
+//			return new GeneratedFactoryRefactorer().refactorFactory(genModel, URI.createPlatformResourceURI("/", true), false);
+//		}
+		return Collections.emptyList();
+	}
+
+	private List<GenClass> getGenClassByName(GenModel genModel, String name){
+		List<GenClass> genClassCandidates = new ArrayList<GenClass>();
+		List<GenPackage> genPackages = genModel.getAllGenPackagesWithClassifiers();
+		for (GenPackage genPackage : genPackages) {
+			EList<GenClass> genClasses = genPackage.getGenClasses();
+			for (GenClass genClass : genClasses) {
+				if(genClass.getName().equals(name)){
+					genClassCandidates.add(genClass);
 				}
-			} catch (JavaModelException e) {
-				e.printStackTrace();
 			}
-			return new GeneratedFactoryRefactorer().refactorFactory(genModel, 
-					URI.createPlatformResourceURI("/", true), false);
+		}
+		return genClassCandidates;
+	}
+	
+	private void adjustFactory(IFile iFile, ResourceSet resourceSet) {
+		//adjust factory for generation gap pattern
+		IJavaProject javaProject = JavaCore.create(iFile.getProject());
+		try {
+			for (IClasspathEntry cpEntry : javaProject.getRawClasspath()) {
+				if (cpEntry.getEntryKind() == IClasspathEntry.CPE_SOURCE) {
+					//to register newly generated code;
+					updateClaspath(new File(iFile.getWorkspace().getRoot().getLocation().toString() + 
+							cpEntry.getPath().toString()), "", resourceSet);
+				}
+			}
+		} catch (JavaModelException e) {
+			e.printStackTrace();
 		}
 	}
 
