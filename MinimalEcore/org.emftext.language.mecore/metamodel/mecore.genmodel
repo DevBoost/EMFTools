@@ -13,7 +13,9 @@
       <genEnumLiterals ecoreEnumLiteral="mecore.ecore#//MSimpleMultiplicityValue/plus"/>
       <genEnumLiterals ecoreEnumLiteral="mecore.ecore#//MSimpleMultiplicityValue/optional"/>
     </genEnums>
-    <genClasses image="false" ecoreClass="mecore.ecore#//MModelElement"/>
+    <genClasses image="false" ecoreClass="mecore.ecore#//MModelElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mecore.ecore#//MModelElement/annotations"/>
+    </genClasses>
     <genClasses image="false" ecoreClass="mecore.ecore#//MNamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MNamedElement/name"/>
     </genClasses>
@@ -83,6 +85,14 @@
     </genClasses>
     <genClasses image="false" ecoreClass="mecore.ecore#//MCommentable">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MCommentable/comment"/>
+    </genClasses>
+    <genClasses ecoreClass="mecore.ecore#//MAnnotation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotation/source"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mecore.ecore#//MAnnotation/entries"/>
+    </genClasses>
+    <genClasses ecoreClass="mecore.ecore#//MAnnotationEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationEntry/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

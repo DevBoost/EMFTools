@@ -16,9 +16,9 @@ OPTIONS {
 
 TOKENS {
 	DEFINE INTEGER $('-')?('0'..'9')+$;
-	DEFINE UPPER $('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'.')*$;
+	DEFINE UPPER $('A'..'Z')('a'..'z'|'A'..'Z'|'0'..'9'|'.'|'_')*$;
 	DEFINE FRAGMENT LOWER_CHAR $('a'..'z')$;
-	DEFINE LOWER LOWER_CHAR + $('a'..'z'|'A'..'Z'|'0'..'9'|'.')*$;
+	DEFINE LOWER LOWER_CHAR + $('a'..'z'|'A'..'Z'|'0'..'9'|'.'|'_')*$;
 	DEFINE WHITESPACES $(' '|'\t'|'\f')+$;
 	DEFINE LINEBREAKS $('\r'|'\n')+$;
 	DEFINE COMMENT $'//'(~('\n'|'\r'))*$;
@@ -34,15 +34,20 @@ TOKENSTYLES {
 } 
 
 RULES {
-	MPackage ::= (name[LOWER] #1)? namespace[URI] 
+	MPackage ::= annotations* (name[LOWER] #1)? namespace[URI] 
 				 (!0 imports)* 
 				 !0 
 				 (!0 contents)*;
 				 
 	MImport  ::= "import" #1 importedPackage[URI] #1 "as" prefix[LOWER];
 
+	MAnnotation ::= source['@',':'] entries*;
+	
+	MAnnotationEntry ::= key['\'','\''] "=" value['\'','\''];
+
 	@SuppressWarnings(optionalKeyword)
 	MClass   ::= comment[ML_COMMENT]?
+				 annotations*
 				 abstract["abstract" : ""] 
 				 interface["interface" : ""]
 	             name[UPPER]
@@ -57,12 +62,12 @@ RULES {
 	MTypeParameter ::= name[UPPER] (":" lowerBound[UPPER])?;
 	
 	@SuppressWarnings(featureWithoutSyntax, optionalKeyword)
-	MEnum    ::= "enum" name[UPPER] ("(" literals* ")")?;
-	MEnumLiteral ::= name[UPPER] literal['"','"']?;
+	MEnum    ::= annotations* "enum" name[UPPER] ("(" literals* ")")?;
+	MEnumLiteral ::= annotations* name[UPPER] literal['"','"']?;
 	
-	MFeature ::= ncReference["~" : ""] name[LOWER] (type[UPPER]|type[LOWER]) multiplicity? ("<>" opposite[UPPER])?;
+	MFeature ::= annotations* ncReference["~" : ""] name[LOWER] (type[UPPER]|type[LOWER]) multiplicity? ("<>" opposite[UPPER])?;
 	
-	MOperation ::=  
+	MOperation ::= annotations*  
 		("<" typeParameters ("," typeParameters)* ">")?
 		name[LOWER] 
 		"(" (parameters ("," parameters)*)? ")" (type[UPPER]|type[LOWER]) multiplicity?;
