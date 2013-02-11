@@ -41,8 +41,15 @@ import org.eclipse.emf.common.util.WrappedException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.Resource.Factory.Registry;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreValidator;
+import org.eclipse.emf.ecore.xmi.XMLResource;
+import org.eclipse.emf.ecore.xmi.XMLSave;
+import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMISaveImpl;
+import org.eclipse.emf.ecore.xmi.impl.XMLString;
 import org.emftext.language.mecore.MPackage;
 import org.emftext.language.mecore.resource.mecore.IMecoreBuilder;
 import org.emftext.language.mecore.resource.mecore.MecoreEProblemType;
@@ -67,12 +74,16 @@ public class MecoreBuilder implements IMecoreBuilder {
 		// read existing .ecore file (if there is one)
 		EPackage existingEPackage = null;
 		URI ecoreURI = resource.getURI().trimFileExtension().trimFileExtension().appendFileExtension("ecore");
+		
+		ResourceSet resourceSet = resource.getResourceSet();
+		replaceResourceFactories(resourceSet);
+		
 		Resource ecoreResource;
 		try {
-			ecoreResource = resource.getResourceSet().getResource(ecoreURI, true);
+			ecoreResource = resourceSet.getResource(ecoreURI, true);
 		} catch (WrappedException e) {
 			// can't load resource, probably it does not exist
-			ecoreResource = resource.getResourceSet().createResource(ecoreURI);
+			ecoreResource = resourceSet.createResource(ecoreURI);
 		}
 		if (!ecoreResource.getErrors().isEmpty()) {
 			// if the .ecore file has errors, we do not run the build, because it will
@@ -106,6 +117,66 @@ public class MecoreBuilder implements IMecoreBuilder {
 		
 		runEcoreValidation(resource, ecoreResource, wrapper);
 		return org.eclipse.core.runtime.Status.OK_STATUS;
+	}
+
+	/**
+	 * We replace the resource factories for '.ecore' and '.genmodel' files to
+	 * make sure that these files are not saved using the default platform line
+	 * delimiter, but the Unix style line delimiter. This is required to avoid
+	 * having irrelevant changes in these files when saving them on machines
+	 * running different OS.
+	 */
+	private void replaceResourceFactories(ResourceSet resourceSet) {
+		Registry resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
+		Map<String, Object> extensionToFactoryMap = resourceFactoryRegistry.getExtensionToFactoryMap();
+		EcoreResourceFactoryImpl modifiedEcoreResourceFactory = new EcoreResourceFactoryImpl() {
+			
+			@Override
+			public Resource createResource(URI uri) {
+				final Resource originalResource = super.createResource(uri);
+				final Map<Object, Object> originalSaveOptions = new LinkedHashMap<Object, Object>();
+				if (originalResource instanceof XMLResource) {
+					XMLResource xmlResource = (XMLResource) originalResource;
+					originalSaveOptions.putAll(xmlResource.getDefaultSaveOptions());
+				}
+				
+				XMIResourceImpl modifiedResource = new XMIResourceImpl(uri) {
+					
+					@Override
+					protected XMLSave createXMLSave() {
+						return new XMISaveImpl(createXMLHelper()) {
+							
+							@Override
+							protected void init(XMLResource resource,
+									Map<?, ?> options) {
+								super.init(resource, options);
+								if (doc != null) {
+									String temporaryFileName = doc.getTemporaryFileName();
+									// get line width
+									Integer lineWidth = (Integer) options.get(XMLResource.OPTION_LINE_WIDTH);
+									int effectiveLineWidth = lineWidth == null ? Integer.MAX_VALUE : lineWidth;
+									
+									doc = new XMLString(effectiveLineWidth, publicId, systemId, temporaryFileName) {
+										
+										private static final long serialVersionUID = -672620373813232183L;
+
+										public void addLine() {
+											// use unix line breaks
+											add("\n");
+											currentLineWidth = 0;
+										}
+									};
+								}
+							}
+						};
+					}
+				};
+				modifiedResource.getDefaultSaveOptions().putAll(originalSaveOptions);
+				return modifiedResource;
+			}
+		};
+		extensionToFactoryMap.put("ecore", modifiedEcoreResourceFactory);
+		extensionToFactoryMap.put("genmodel", modifiedEcoreResourceFactory);
 	}
 
 	private void runEcoreValidation(MecoreResource mResource,
