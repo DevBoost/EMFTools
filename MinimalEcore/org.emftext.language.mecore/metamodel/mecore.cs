@@ -11,7 +11,7 @@ OPTIONS {
 	disableLaunchSupport = "true";
 	disableDebugSupport = "true";
 	
-	additionalDependencies = "org.eclipse.emf.codegen.ecore";
+	additionalDependencies = "org.eclipse.emf.codegen.ecore,org.eclipse.emf.ecore.xmi";
 }
 
 TOKENS {
