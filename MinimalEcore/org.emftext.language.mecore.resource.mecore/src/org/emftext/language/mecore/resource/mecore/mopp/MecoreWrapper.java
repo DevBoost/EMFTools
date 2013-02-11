@@ -39,6 +39,8 @@ import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.emftext.language.mecore.MAnnotation;
+import org.emftext.language.mecore.MAnnotationEntry;
 import org.emftext.language.mecore.MClass;
 import org.emftext.language.mecore.MClassifier;
 import org.emftext.language.mecore.MComplexMultiplicity;
@@ -72,7 +74,7 @@ public class MecoreWrapper {
 	private static final String COMMENT_VALUE = "This element was generated from an .mecore file. Removing this annotation will signal the MinimalEcore builder to keep this element.";
 
 	private Map<MModelElement, EObject> primaryMapping = new LinkedHashMap<MModelElement, EObject>();
-	// this mapping is to used to trace validation errors that are detected in 
+	// this mapping is to used to trace validation errors that are detected in
 	// the Ecore model back to the Mecore model
 	private Map<EObject, MModelElement> reverseMapping = new LinkedHashMap<EObject, MModelElement>();
 
@@ -109,6 +111,8 @@ public class MecoreWrapper {
 			wrapMClassifier(mClassifier, ePackage);
 		}
 
+		wrapMAnnotations(mPackage, ePackage);
+
 		// execute deferred commands
 		for (IMecoreCommand<Object> command : commands) {
 			command.execute(null);
@@ -116,6 +120,14 @@ public class MecoreWrapper {
 
 		removeObsoleteElements(ePackage);
 		return ePackage;
+	}
+
+	private void wrapMAnnotations(MModelElement mecoreModelElement, EModelElement ecoreModelElement) {
+		for (MAnnotation annotation: mecoreModelElement.getAnnotations()) {
+			for (MAnnotationEntry entry: annotation.getEntries()) {
+				addAnnotation(ecoreModelElement, annotation.getSource(), entry.getKey(), entry.getValue());
+			}
+		}
 	}
 
 	private void removeObsoleteElements(EPackage ePackage) {
@@ -141,6 +153,17 @@ public class MecoreWrapper {
 				removeObsoleteElements(child, obsoleteElements);
 			}
 		}
+	}
+
+	private void addAnnotation(EModelElement element, String source,
+			String key, String value) {
+		EAnnotation eAnnotation = element.getEAnnotation(source);
+		if (eAnnotation == null) {
+			eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
+			eAnnotation.setSource(source);
+			element.getEAnnotations().add(eAnnotation);
+		}
+		eAnnotation.getDetails().put(key, value);
 	}
 
 	private void addAnnotation(EModelElement element, String comment) {
@@ -176,6 +199,8 @@ public class MecoreWrapper {
 		for (MEnumLiteral literal : mEnum.getLiterals()) {
 			wrapMEnumLiteral(literal, eEnum, count++);
 		}
+		wrapMAnnotations(mEnum, eEnum);
+
 		primaryMapping.put(mEnum, eEnum);
 	}
 
@@ -186,6 +211,8 @@ public class MecoreWrapper {
 		eEnumLiteral.setName(literal.getName());
 		eEnumLiteral.setLiteral(literal.getLiteral());
 		eEnumLiteral.setValue(count);
+		wrapMAnnotations(literal, eEnumLiteral);
+
 		primaryMapping.put(literal, eEnumLiteral);
 	}
 
@@ -210,6 +237,9 @@ public class MecoreWrapper {
 			wrapMOperation(mOperation, eClass);
 		}
 
+		wrapMAnnotations(mClass, eClass);
+
+		
 		// handle type parameters
 		addTypeParameters(mClass, eClass);
 
@@ -274,7 +304,9 @@ public class MecoreWrapper {
 			throw new RuntimeException("Found unknown subtype of MType: "
 					+ mType.eClass().getName());
 		}
-		setMulitplicity(mFeature, eFeature);
+		setMultiplicity(mFeature, eFeature);
+		wrapMAnnotations(mFeature, eFeature);
+
 		primaryMapping.put(mFeature, eFeature);
 		eFeature.setName(mFeature.getName());
 	}
@@ -308,8 +340,12 @@ public class MecoreWrapper {
 			}
 		});
 
-		setMulitplicity(mOperation, eOperation);
+		setMultiplicity(mOperation, eOperation);
+	
+		wrapMAnnotations(mOperation, eOperation);
+		
 		primaryMapping.put(mOperation, eOperation);
+
 		eOperation.setName(mOperation.getName());
 	}
 
@@ -404,7 +440,7 @@ public class MecoreWrapper {
 			}
 		});
 
-		setMulitplicity(mParameter, eParameter);
+		setMultiplicity(mParameter, eParameter);
 		primaryMapping.put(mParameter, eParameter);
 		eParameter.setName(mParameter.getName());
 	}
@@ -431,7 +467,7 @@ public class MecoreWrapper {
 		return eReference;
 	}
 
-	private void setMulitplicity(MTypedElement mElement, ETypedElement eElement) {
+	private void setMultiplicity(MTypedElement mElement, ETypedElement eElement) {
 		MMultiplicity multiplicity = mElement.getMultiplicity();
 		if (multiplicity instanceof MSimpleMultiplicity) {
 			MSimpleMultiplicity simpleMultiplicity = (MSimpleMultiplicity) multiplicity;
@@ -479,7 +515,7 @@ public class MecoreWrapper {
 		// if we can't find an existing EPackage, we need to create a fresh one
 		EPackage ePackage = EcoreFactory.eINSTANCE.createEPackage();
 		reverseMapping.put(ePackage, mPackage);
-		
+
 		addAnnotation(ePackage, COMMENT_VALUE);
 		if (existingSuperPackage != null) {
 			existingSuperPackage.getESubpackages().add(ePackage);
@@ -594,7 +630,7 @@ public class MecoreWrapper {
 		// one
 		EReference eReference = EcoreFactory.eINSTANCE.createEReference();
 		reverseMapping.put(eReference, mFeature);
-		
+
 		addAnnotation(eReference, COMMENT_VALUE);
 		existingEClass.getEStructuralFeatures().add(eReference);
 		primaryMapping.put(mFeature, eReference);
@@ -627,7 +663,7 @@ public class MecoreWrapper {
 		// one
 		EOperation eOperation = EcoreFactory.eINSTANCE.createEOperation();
 		reverseMapping.put(eOperation, mOperation);
-		
+
 		addAnnotation(eOperation, COMMENT_VALUE);
 		existingEClass.getEOperations().add(eOperation);
 		primaryMapping.put(mOperation, eOperation);
@@ -660,7 +696,7 @@ public class MecoreWrapper {
 		// one
 		EParameter eParameter = EcoreFactory.eINSTANCE.createEParameter();
 		reverseMapping.put(eParameter, mParameter);
-		
+
 		addAnnotation(eParameter, COMMENT_VALUE);
 		existingEOperation.getEParameters().add(eParameter);
 		primaryMapping.put(mParameter, eParameter);

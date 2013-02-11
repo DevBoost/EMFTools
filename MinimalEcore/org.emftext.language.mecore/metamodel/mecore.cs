@@ -41,7 +41,7 @@ RULES {
 				 
 	MImport  ::= "import" #1 importedPackage[URI] #1 "as" prefix[LOWER];
 
-	MAnnotation ::= source['@',':'] entries*;
+	MAnnotation ::= source['\'','\''] entries*;
 	
 	MAnnotationEntry ::= key['\'','\''] "=" value['\'','\''];
 
