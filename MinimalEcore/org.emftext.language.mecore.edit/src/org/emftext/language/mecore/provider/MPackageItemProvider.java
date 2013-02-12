@@ -130,6 +130,7 @@ public class MPackageItemProvider
       super.getChildrenFeatures(object);
       childrenFeatures.add(MecorePackage.Literals.MPACKAGE__IMPORTS);
       childrenFeatures.add(MecorePackage.Literals.MPACKAGE__CONTENTS);
+      childrenFeatures.add(MecorePackage.Literals.MPACKAGE__ANNOTATION_DEFINITIONS);
     }
     return childrenFeatures;
   }
@@ -190,6 +191,7 @@ public class MPackageItemProvider
         return;
       case MecorePackage.MPACKAGE__IMPORTS:
       case MecorePackage.MPACKAGE__CONTENTS:
+      case MecorePackage.MPACKAGE__ANNOTATION_DEFINITIONS:
         fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
         return;
     }
@@ -221,6 +223,11 @@ public class MPackageItemProvider
       (createChildParameter
         (MecorePackage.Literals.MPACKAGE__CONTENTS,
          MecoreFactory.eINSTANCE.createMEnum()));
+
+    newChildDescriptors.add
+      (createChildParameter
+        (MecorePackage.Literals.MPACKAGE__ANNOTATION_DEFINITIONS,
+         MecoreFactory.eINSTANCE.createMAnnotationDefinition()));
   }
 
 }

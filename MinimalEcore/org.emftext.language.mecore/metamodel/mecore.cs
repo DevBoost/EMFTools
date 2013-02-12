@@ -35,13 +35,17 @@ TOKENSTYLES {
 
 RULES {
 	MPackage ::= annotations* (name[LOWER] #1)? namespace[URI] 
-				 (!0 imports)* 
+				 (!0 imports)*
+				 (!0 annotationDefinitions)* 
 				 !0 
 				 (!0 contents)*;
 				 
 	MImport  ::= "import" #1 importedPackage[URI] #1 "as" prefix[LOWER];
 
-	MAnnotation ::= source['\'','\''] entries*;
+
+	MAnnotationDefinition ::= "define" "@"name[LOWER] "as" source['\'','\''];
+	 
+	MAnnotation ::= "@"annotationDefinition[LOWER] entries*;
 	
 	MAnnotationEntry ::= key['\'','\''] "=" value['\'','\''];
 

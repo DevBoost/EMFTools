@@ -540,6 +540,31 @@ public class MecoreItemProviderAdapterFactory extends MecoreAdapterFactory imple
   }
 
   /**
+   * This keeps track of the one adapter used for all {@link org.emftext.language.mecore.MAnnotationDefinition} instances.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected MAnnotationDefinitionItemProvider mAnnotationDefinitionItemProvider;
+
+  /**
+   * This creates an adapter for a {@link org.emftext.language.mecore.MAnnotationDefinition}.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Adapter createMAnnotationDefinitionAdapter()
+  {
+    if (mAnnotationDefinitionItemProvider == null)
+    {
+      mAnnotationDefinitionItemProvider = new MAnnotationDefinitionItemProvider(this);
+    }
+
+    return mAnnotationDefinitionItemProvider;
+  }
+
+  /**
    * This returns the root adapter factory that contains this factory.
    * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -660,6 +685,7 @@ public class MecoreItemProviderAdapterFactory extends MecoreAdapterFactory imple
     if (mSuperTypeReferenceItemProvider != null) mSuperTypeReferenceItemProvider.dispose();
     if (mAnnotationItemProvider != null) mAnnotationItemProvider.dispose();
     if (mAnnotationEntryItemProvider != null) mAnnotationEntryItemProvider.dispose();
+    if (mAnnotationDefinitionItemProvider != null) mAnnotationDefinitionItemProvider.dispose();
   }
 
 }

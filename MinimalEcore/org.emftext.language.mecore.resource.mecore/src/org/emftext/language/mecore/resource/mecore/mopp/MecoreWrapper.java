@@ -125,7 +125,7 @@ public class MecoreWrapper {
 	private void wrapMAnnotations(MModelElement mecoreModelElement, EModelElement ecoreModelElement) {
 		for (MAnnotation annotation: mecoreModelElement.getAnnotations()) {
 			for (MAnnotationEntry entry: annotation.getEntries()) {
-				addAnnotation(ecoreModelElement, annotation.getSource(), entry.getKey(), entry.getValue());
+				addAnnotation(ecoreModelElement, annotation.getAnnotationDefinition().getSource(), entry.getKey(), entry.getValue());
 			}
 		}
 	}

@@ -28,6 +28,7 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MPackage/namespace"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mecore.ecore#//MPackage/imports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mecore.ecore#//MPackage/contents"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mecore.ecore#//MPackage/annotationDefinitions"/>
     </genClasses>
     <genClasses ecoreClass="mecore.ecore#//MImport">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MImport/prefix"/>
@@ -87,12 +88,16 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MCommentable/comment"/>
     </genClasses>
     <genClasses ecoreClass="mecore.ecore#//MAnnotation">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotation/source"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference mecore.ecore#//MAnnotation/entries"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MAnnotation/annotationDefinition"/>
     </genClasses>
     <genClasses ecoreClass="mecore.ecore#//MAnnotationEntry">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationEntry/key"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="mecore.ecore#//MAnnotationDefinition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationDefinition/source"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationDefinition/name"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
