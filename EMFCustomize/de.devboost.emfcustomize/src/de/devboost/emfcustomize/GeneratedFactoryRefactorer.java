@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -77,7 +77,7 @@ public class GeneratedFactoryRefactorer {
 		ResourceSet resourceSet = genModel.eResource().getResourceSet();
 		URI uri = null;
 		String modelDirectory = genModel.getModelDirectory();
-		if(genModel != null && genClass != null){
+		if (genClass != null) {
 			GenPackage genPackage = genClass.getGenPackage();
 			String factoryClassName = genPackage.getQualifiedFactoryClassName();
 			String uriString = modelDirectory + "/" + factoryClassName.replaceAll("\\.", "/") + ".java";
