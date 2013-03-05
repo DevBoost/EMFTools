@@ -16,6 +16,7 @@
 package de.devboost.emfcustomize;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -28,6 +29,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
@@ -39,6 +41,7 @@ import org.emftext.language.java.annotations.AnnotationInstance;
 import org.emftext.language.java.classifiers.Class;
 import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
+import org.emftext.language.java.commons.Commentable;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.generics.QualifiedTypeArgument;
 import org.emftext.language.java.members.Method;
@@ -68,9 +71,10 @@ public class EcoreModelRefactorer {
 		}
 
 		clearExistingOperations(eClass);
+		List<Method> annotatedMethods = getAnnotatedMethods(customClass);
 
 		for (Method method : customClass.getMethods()) {
-			if(canOperationForMethodBeGenerated(method, eClass)){
+			if(isAnnotated(method) && canOperationForMethodBeGenerated(method, eClass)){
 				for (AnnotationInstanceOrModifier modifier : method.getAnnotationsAndModifiers()) {
 					if (modifier instanceof Public) {
 						EOperation newEOperation = EcoreFactory.eINSTANCE.createEOperation();
@@ -126,6 +130,36 @@ public class EcoreModelRefactorer {
 		}
 	}
 
+	public List<Method> getAnnotatedMethods(Class customClass) {
+		List<Method> annotatedMethods = new ArrayList<Method>();
+		Iterator<EObject> contents = customClass.eAllContents();
+		while (contents.hasNext()) {
+			EObject element = (EObject) contents.next();
+			if(element instanceof Commentable){
+				List<String> comments = ((Commentable) element).getComments();
+				if(comments != null && comments.size() > 0){
+					for (String comment : comments) {
+						System.out.println(comment);
+					}
+				}
+			}
+		}
+		return annotatedMethods;
+	}
+
+	private boolean isAnnotated(Method method) {
+		if(method != null){
+			EObject eContainer = method.eContainer();
+			List<String> comments2 = method.getComments();
+			List<AnnotationInstanceOrModifier> annotationsAndModifiers = method.getAnnotationsAndModifiers();
+			for (AnnotationInstanceOrModifier annotationInstanceOrModifier : annotationsAndModifiers) {
+				List<String> comments = annotationInstanceOrModifier.getComments();
+				System.out.println();
+			}
+		}
+		return false;
+	}
+	
 	private boolean canOperationForMethodBeGenerated(Method method, EClass ecoreClass){
 		// structural features?
 		if(method.getName().startsWith("get") || method.getName().startsWith("set")){
