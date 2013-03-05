@@ -137,10 +137,11 @@ public class EcoreModelRefactorer {
 			EObject element = (EObject) contents.next();
 			if(element instanceof Commentable){
 				List<String> comments = ((Commentable) element).getComments();
-				if(comments != null && comments.size() > 0){
-					for (String comment : comments) {
-						System.out.println(comment);
-					}
+				if(comments != null && comments.size() > 0 && element instanceof Method){
+					annotatedMethods.add((Method) element);
+//					for (String comment : comments) {
+//						System.out.println(comment);
+//					}
 				}
 			}
 		}
