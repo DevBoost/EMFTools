@@ -12,5 +12,6 @@ Require-Bundle: org.emftext.language.java,
  org.eclipse.emf.codegen.ecore,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.jdt.core,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.apache.commons.lang
 Export-Package: de.devboost.emfcustomize

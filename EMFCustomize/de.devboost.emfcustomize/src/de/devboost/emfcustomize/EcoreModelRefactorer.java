@@ -17,11 +17,12 @@ package de.devboost.emfcustomize;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.codegen.ecore.genmodel.GenClass;
 import org.eclipse.emf.codegen.ecore.genmodel.GenPackage;
@@ -29,19 +30,15 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EOperation;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EParameter;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.EcoreFactory;
 import org.eclipse.emf.ecore.EcorePackage;
 import org.eclipse.emf.ecore.resource.Resource;
-import org.emftext.language.java.annotations.AnnotationInstance;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.java.classifiers.Class;
-import org.emftext.language.java.classifiers.Classifier;
 import org.emftext.language.java.classifiers.ConcreteClassifier;
-import org.emftext.language.java.commons.Commentable;
 import org.emftext.language.java.containers.CompilationUnit;
 import org.emftext.language.java.generics.QualifiedTypeArgument;
 import org.emftext.language.java.members.Method;
@@ -56,6 +53,9 @@ import org.emftext.language.java.types.TypeReference;
 
 public class EcoreModelRefactorer {
 
+	public static final String MODEL_ANNOTATION			= "@model";
+	private static final char[] VALID_PREFIX_CHARACTERS	= new char[]{'*'};
+	
 	public void propagateEOperations(JavaResource resource, GenClass genClass) {
 		GenPackage genPackage = genClass.getGenPackage();
 		EPackage ePackage = genPackage.getEcorePackage();
@@ -70,47 +70,63 @@ public class EcoreModelRefactorer {
 			return;
 		}
 
-		clearExistingOperations(eClass);
-		List<Method> annotatedMethods = getAnnotatedMethods(customClass);
+		Set<Method> annotatedMethods = getAnnotatedMethods(customClass);
 
-		for (Method method : customClass.getMethods()) {
-			if(isAnnotated(method) && canOperationForMethodBeGenerated(method, eClass)){
-				for (AnnotationInstanceOrModifier modifier : method.getAnnotationsAndModifiers()) {
-					if (modifier instanceof Public) {
-						EOperation newEOperation = EcoreFactory.eINSTANCE.createEOperation();
-						annotateAsGenerated(newEOperation);
-						newEOperation.setName(method.getName());
-						Type opType = method.getTypeReference().getTarget();
-						newEOperation.setEType(eClassifierForCustomClass(opType,
-								method.getTypeReference(), ePackage));
-						if (isMulti(opType)) {
-							newEOperation.setUpperBound(-1);
-						}
-						for (Parameter parameter : method.getParameters()) {
-							EParameter newEParameter = EcoreFactory.eINSTANCE.createEParameter();
-							newEParameter.setName(parameter.getName());
-							Type paramType = parameter.getTypeReference().getTarget();
-							newEParameter.setEType(eClassifierForCustomClass(paramType,
-									parameter.getTypeReference(), ePackage));
-							//TODO generics, ...
-							newEOperation.getEParameters().add(newEParameter);
-						}
-						for (AnnotationInstanceOrModifier annotationInstance : method.getAnnotationsAndModifiers()) {
-							if (annotationInstance instanceof AnnotationInstance) {
-								Classifier javaAnnotation = ((AnnotationInstance) annotationInstance).getAnnotation();
-								if (javaAnnotation.eIsProxy()) {
-									continue;
-								}
-								EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
-								eAnnotation.setSource(javaAnnotation.getContainingCompilationUnit(
-										).getNamespacesAsString() + javaAnnotation.getName());
-								newEOperation.getEAnnotations().add(eAnnotation);
-							}
-						}
-
-						eClass.getEOperations().add(newEOperation);
-						break;
+		for (Method method : annotatedMethods) {
+			for (AnnotationInstanceOrModifier modifier : method.getAnnotationsAndModifiers()) {
+				if (modifier instanceof Public) {
+					EOperation newEOperation = EcoreFactory.eINSTANCE.createEOperation();
+					newEOperation.setName(method.getName());
+					Type opType = method.getTypeReference().getTarget();
+					newEOperation.setEType(eClassifierForCustomClass(opType,
+							method.getTypeReference(), ePackage));
+					if (isMulti(opType)) {
+						newEOperation.setUpperBound(-1);
 					}
+					for (Parameter parameter : method.getParameters()) {
+						EParameter newEParameter = EcoreFactory.eINSTANCE.createEParameter();
+						newEParameter.setName(parameter.getName());
+						Type paramType = parameter.getTypeReference().getTarget();
+						newEParameter.setEType(eClassifierForCustomClass(paramType, parameter.getTypeReference(), ePackage));
+						//TODO generics, ...
+						newEOperation.getEParameters().add(newEParameter);
+					}
+					// TODO @jendrik: why is that needed?
+//					for (AnnotationInstanceOrModifier annotationInstance : method.getAnnotationsAndModifiers()) {
+//						if (annotationInstance instanceof AnnotationInstance) {
+//							Classifier javaAnnotation = ((AnnotationInstance) annotationInstance).getAnnotation();
+//							if (javaAnnotation.eIsProxy()) {
+//								continue;
+//							}
+//							EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
+//							eAnnotation.setSource(javaAnnotation.getContainingCompilationUnit(
+//									).getNamespacesAsString() + javaAnnotation.getName());
+//							newEOperation.getEAnnotations().add(eAnnotation);
+//						}
+//					}
+					boolean operationAlreadyExists = false;
+					List<EOperation> operations = eClass.getEOperations();
+					List<EOperation> existingOperations = new ArrayList<EOperation>(operations);
+					// must be done here already for ensuring that compared operations have the same parent
+					eClass.getEOperations().add(newEOperation);
+					for (EOperation existingOperation : existingOperations) {
+						boolean removed = removeAnnotation(existingOperation);
+						if(EcoreUtil.equals(existingOperation, newEOperation)){
+							operationAlreadyExists = true;
+							removeAnnotation(existingOperation);
+							annotateAsGenerated(existingOperation);
+							break;
+						}
+						if(removed){
+							annotateAsGenerated(existingOperation);
+						}
+					}
+					if(!operationAlreadyExists){
+						annotateAsGenerated(newEOperation);
+					} else {
+						eClass.getEOperations().remove(newEOperation);
+					}
+					break;
 				}
 			}
 		}
@@ -130,85 +146,51 @@ public class EcoreModelRefactorer {
 		}
 	}
 
-	public List<Method> getAnnotatedMethods(Class customClass) {
-		List<Method> annotatedMethods = new ArrayList<Method>();
-		Iterator<EObject> contents = customClass.eAllContents();
-		while (contents.hasNext()) {
-			EObject element = (EObject) contents.next();
-			if(element instanceof Commentable){
-				List<String> comments = ((Commentable) element).getComments();
-				if(comments != null && comments.size() > 0 && element instanceof Method){
-					annotatedMethods.add((Method) element);
-//					for (String comment : comments) {
-//						System.out.println(comment);
-//					}
+	private boolean removeAnnotation(EOperation existingOperation) {
+		List<EAnnotation> annotations = existingOperation.getEAnnotations();
+		EAnnotation annotationToRemove = null;
+		for (EAnnotation annotation : annotations) {
+			if(annotation.getSource().equals(EcoreModelRefactorer.class.getName())){
+				annotationToRemove = annotation;
+			}
+		}
+		if(annotationToRemove != null){
+			return annotations.remove(annotationToRemove);
+		}
+		return false;
+	}
+
+	public Set<Method> getAnnotatedMethods(Class customClass) {
+		Set<Method> annotatedMethods = new HashSet<Method>();
+		
+		List<Method> methods = customClass.getMethods();
+		for (Method method : methods) {
+			List<String> comments = method.getComments();
+			if(comments != null && comments.size() > 0){
+				for (String comment : comments) {
+					String[] lines = comment.split("[\\r\\n]+");
+					for (String line : lines) {
+						String deleteWhitespace = StringUtils.deleteWhitespace(line);
+						if(StringUtils.endsWith(deleteWhitespace, MODEL_ANNOTATION)){
+							String difference = StringUtils.removeEnd(deleteWhitespace, MODEL_ANNOTATION);
+							if(StringUtils.containsOnly(difference, VALID_PREFIX_CHARACTERS) || difference.isEmpty()){
+								annotatedMethods.add(method);
+							}
+						}
+					}
 				}
 			}
 		}
 		return annotatedMethods;
 	}
 
-	private boolean isAnnotated(Method method) {
-		if(method != null){
-			EObject eContainer = method.eContainer();
-			List<String> comments2 = method.getComments();
-			List<AnnotationInstanceOrModifier> annotationsAndModifiers = method.getAnnotationsAndModifiers();
-			for (AnnotationInstanceOrModifier annotationInstanceOrModifier : annotationsAndModifiers) {
-				List<String> comments = annotationInstanceOrModifier.getComments();
-				System.out.println();
-			}
-		}
-		return false;
-	}
-	
-	private boolean canOperationForMethodBeGenerated(Method method, EClass ecoreClass){
-		// structural features?
-		if(method.getName().startsWith("get") || method.getName().startsWith("set")){
-			String realName = method.getName().substring(3);
-			char[] stringArray = realName.toCharArray();
-			stringArray[0] = Character.toUpperCase(stringArray[0]);
-			String realNameLowerCase = new String(stringArray);
-			List<EStructuralFeature> structuralFeatures = ecoreClass.getEAllStructuralFeatures();
-			for (EStructuralFeature structuralFeature : structuralFeatures) {
-				if(structuralFeature.getName().equals(realNameLowerCase) || structuralFeature.getName().equals(realName)){
-					return false;
-				}
-			}
-		}
-		// super method?
-		List<AnnotationInstanceOrModifier> annotationsAndModifiers = method.getAnnotationsAndModifiers();
-		for (AnnotationInstanceOrModifier annotationInstanceOrModifier : annotationsAndModifiers) {
-			if(annotationInstanceOrModifier instanceof AnnotationInstance){
-				AnnotationInstance annotationInstance = (AnnotationInstance) annotationInstanceOrModifier;
-				Classifier classifier = annotationInstance.getAnnotation();
-				String name = classifier.getName();
-				List<String> packageName = classifier.getContainingPackageName();
-				if("Override".equals(name) && packageName.size() == 2 && "java".equals(packageName.get(0)) && "lang".equals(packageName.get(1))){
-					//modelled operation?
-					List<EOperation> operations = ecoreClass.getEOperations();
-					for (EOperation operation : operations) {
-						if(operation.getName().equals(method.getName())){
-							if(operation.getEAnnotation(EcoreModelRefactorer.class.getName()) == null){
-								// TODO check signature
-								
-							}
-							return true;
-						}
-					}
-					return false;
-				}
-			}
-		}
-		return true;
-	}
-
-	private void clearExistingOperations(EClass eClass) {
-		for (Iterator<EOperation> i = eClass.getEOperations().iterator(); i.hasNext();) {
-			if (i.next().getEAnnotation(EcoreModelRefactorer.class.getName()) != null) {
-				i.remove();
-			}		
-		}
-	}
+//	private void clearExistingOperations(EClass eClass) {
+//		for (Iterator<EOperation> i = eClass.getEOperations().iterator(); i.hasNext();) {
+//			if (i.next().getEAnnotation(EcoreModelRefactorer.class.getName()) != null) {
+//				i.remove();
+//			}		
+//		}
+//	}
 
 	private void annotateAsGenerated(EOperation newEOperation) {
 		EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
