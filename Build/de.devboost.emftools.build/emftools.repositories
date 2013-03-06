@@ -37,3 +37,6 @@ get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/tools/orbit/downloads/d
 
 // Feedback
 git:https://github.com/DevBoost/Feedback.git!Core/
+
+// Apache Commons Lang (required for EMFCustomize for determining comments containing one line with the @model annotation)
+get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/tools/orbit/downloads/drops/S20130201140822/repository/plugins!org.apache.commons.lang_2.6.0.v201205030909.jar
