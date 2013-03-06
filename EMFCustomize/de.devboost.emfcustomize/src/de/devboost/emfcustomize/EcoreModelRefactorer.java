@@ -217,9 +217,9 @@ public class EcoreModelRefactorer {
 				if (className.equals("Class")) {
 					className = "JavaClass"; //TODO type parameters
 				}
-				className = "E" + className;
 				for (EClassifier typeFromEcore : EcorePackage.eINSTANCE.getEClassifiers()) {
-					if (typeFromEcore.getName().equals(className)) {
+					// so that not only String is mapped to EString but also EObject to EObject
+					if (typeFromEcore.getName().equals(className) || typeFromEcore.getName().equals("E" + className)) {
 						return typeFromEcore;
 					}
 				}
