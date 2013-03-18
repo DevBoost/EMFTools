@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: GenExt EMFCustomize
+Bundle-SymbolicName: org.buildboost.genext.emfcustomize
+Bundle-Version: 1.0.0.qualifier
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: de.devboost.buildboost,
+ de.devboost.buildboost.genext.emf
+Export-Package: org.dropsbox.autobuild.genext.emfcustomize
