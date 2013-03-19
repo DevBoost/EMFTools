@@ -24,9 +24,11 @@ import de.devboost.buildboost.ant.AntScript;
 import de.devboost.buildboost.discovery.EclipseTargetPlatformAnalyzer;
 import de.devboost.buildboost.discovery.PluginFinder;
 import de.devboost.buildboost.genext.emf.discovery.GenModelFinder;
+import de.devboost.buildboost.model.IUniversalBuildStage;
 import de.devboost.buildboost.stages.AbstractBuildStage;
 
-public class ExecuteEMFCustomizeStage extends AbstractBuildStage {
+public class ExecuteEMFCustomizeStage extends AbstractBuildStage 
+	implements IUniversalBuildStage {
 
 	private String buildDirPath;
 	private String eclipseHome;
@@ -58,5 +60,10 @@ public class ExecuteEMFCustomizeStage extends AbstractBuildStage {
 		script.addTargets(builder.generateAntTargets());
 		
 		return script;
+	}
+
+	@Override
+	public int getPriority() {
+		return 2001;
 	}
 }
