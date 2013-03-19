@@ -30,27 +30,21 @@ import de.devboost.buildboost.stages.AbstractBuildStage;
 public class ExecuteEMFCustomizeStage extends AbstractBuildStage 
 	implements IUniversalBuildStage {
 
-	private String buildDirPath;
-	private String eclipseHome;
+	private String artifactsFolder;
 	
-	public void setBuildDirPath(String buildDirPath) {
-		this.buildDirPath = buildDirPath;
-	}
-
-	public void setEclipseHome(String eclipseHome) {
-		this.eclipseHome = eclipseHome;
+	public void setArtifactsFolder(String artifactsFolder) {
+		this.artifactsFolder = artifactsFolder;
 	}
 
 	public AntScript getScript() throws BuildException {
-		File buildDir = new File(buildDirPath);
-		File targetPlatform = new File(eclipseHome);
-
 		BuildContext context = createContext(true);
 		
-		context.addBuildParticipant(new EclipseTargetPlatformAnalyzer(targetPlatform));
-		context.addBuildParticipant(new PluginFinder(buildDir));
-		context.addBuildParticipant(new GenModelFinder(buildDir));
-		context.addBuildParticipant(new EMFCustomieDependencyAdder());
+		File artifactsFolderFile = new File(artifactsFolder);
+		
+		context.addBuildParticipant(new EclipseTargetPlatformAnalyzer(artifactsFolderFile));
+		context.addBuildParticipant(new PluginFinder(artifactsFolderFile));
+		context.addBuildParticipant(new GenModelFinder(artifactsFolderFile));
+		context.addBuildParticipant(new EMFCustomizeDependencyAdder());
 		context.addBuildParticipant(new ExecuteEMFCustomizeStepProvider());
 		
 		AutoBuilder builder = new AutoBuilder(context);

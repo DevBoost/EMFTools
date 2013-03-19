@@ -26,7 +26,7 @@ import de.devboost.buildboost.model.IBuildContext;
 import de.devboost.buildboost.model.IBuildParticipant;
 import de.devboost.buildboost.model.UnresolvedDependency;
 
-public final class EMFCustomieDependencyAdder extends
+public final class EMFCustomizeDependencyAdder extends
 		AbstractBuildParticipant {
 	
 	@Override
