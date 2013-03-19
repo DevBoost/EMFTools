@@ -6,4 +6,4 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Require-Bundle: de.devboost.buildboost,
  de.devboost.buildboost.genext.emf
-Export-Package: org.dropsbox.autobuild.genext.emfcustomize
+Export-Package: org.buildboost.genext.emfcustomize

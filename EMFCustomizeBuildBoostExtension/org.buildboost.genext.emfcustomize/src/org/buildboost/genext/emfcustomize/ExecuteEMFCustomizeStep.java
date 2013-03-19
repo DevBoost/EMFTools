@@ -13,7 +13,7 @@
  *   DevBoost GmbH - Berlin, Germany
  *      - initial API and implementation
  ******************************************************************************/
-package org.dropsbox.autobuild.genext.emfcustomize;
+package org.buildboost.genext.emfcustomize;
 
 import java.io.File;
 import java.util.Collection;
