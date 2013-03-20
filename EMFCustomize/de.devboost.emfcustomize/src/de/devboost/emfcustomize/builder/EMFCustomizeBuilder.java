@@ -62,17 +62,20 @@ public class EMFCustomizeBuilder {
 	}
 
 	private boolean isCustomCodeFile(URI uri) {
-		return "java".equals(uri.fileExtension()) && 
-				uri.trimFileExtension().lastSegment().endsWith(
-						GeneratedFactoryRefactorer.CUSTOM_CLASS_SUFFIX);
-	}
-	
-	private boolean isFactoryCodeFile(URI uri) {
-		return "java".equals(uri.fileExtension()) && 
-				uri.trimFileExtension().lastSegment().endsWith(
-						GeneratedFactoryRefactorer.FACTORY_CLASS_SUFFIX);
+		return isJavaFileWithSuffix(uri, GeneratedFactoryRefactorer.CUSTOM_CLASS_SUFFIX);
 	}
 
+	private boolean isFactoryCodeFile(URI uri) {
+		return isJavaFileWithSuffix(uri, GeneratedFactoryRefactorer.FACTORY_CLASS_SUFFIX);
+	}
+
+	private boolean isJavaFileWithSuffix(URI uri, String suffix) {
+		boolean isJavaFile = "java".equals(uri.fileExtension());
+		String lastSegment = uri.trimFileExtension().lastSegment();
+		boolean hasSuffix = lastSegment.endsWith(suffix);
+		return isJavaFile && hasSuffix;
+	}
+	
 	public List<Resource> build(Resource resource, IFile iFile) {
 		ResourceSet resourceSet = resource.getResourceSet();
 		String possibleGenModelName = resource.getURI().trimSegments(2).lastSegment();
