@@ -13,7 +13,7 @@
  *   DevBoost GmbH - Berlin, Germany
  *      - initial API and implementation
  ******************************************************************************/
-package org.buildboost.genext.emfcustomize;
+package org.buildboost.genext.emfcustomize.steps;
 
 import java.io.File;
 import java.util.Collection;

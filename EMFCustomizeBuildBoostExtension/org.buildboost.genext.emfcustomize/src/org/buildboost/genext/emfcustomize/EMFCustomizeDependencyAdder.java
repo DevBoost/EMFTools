@@ -26,8 +26,11 @@ import de.devboost.buildboost.model.IBuildContext;
 import de.devboost.buildboost.model.IBuildParticipant;
 import de.devboost.buildboost.model.UnresolvedDependency;
 
-public final class EMFCustomizeDependencyAdder extends
-		AbstractBuildParticipant {
+/**
+ * The {@link EMFCustomizeDependencyAdder} add a dependency to all 
+ * {@link GeneratorModel}s to EMFCustomize.
+ */
+public class EMFCustomizeDependencyAdder extends AbstractBuildParticipant {
 	
 	@Override
 	public void execute(IBuildContext context) throws BuildException {
