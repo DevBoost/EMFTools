@@ -45,7 +45,7 @@ public class ExecuteEMFCustomizeStep extends AbstractAntTargetGenerator {
 	public Collection<AntTarget> generateAntTargets() throws BuildException {
 		Collection<IDependable> dependencies = generatorModel.getDependencies();
 		if (dependencies.isEmpty()) {
-			throw new BuildException("Generator models are expected to have a dependency to the AutoBuild EMF plug-in.");
+			throw new BuildException("Generator models are expected to have a dependency to the BuildBoost EMF plug-in.");
 		}
 		XMLContent classpath = new ClasspathHelper().getClasspath(generatorModel, true);
 		XMLContent runtimeClasspath = new ClasspathHelper("",";").getClasspath(generatorModel, true);
