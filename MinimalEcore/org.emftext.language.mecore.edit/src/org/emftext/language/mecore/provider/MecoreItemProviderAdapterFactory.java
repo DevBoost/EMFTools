@@ -493,22 +493,22 @@ public class MecoreItemProviderAdapterFactory extends MecoreAdapterFactory imple
    * This keeps track of the one adapter used for all {@link org.emftext.language.mecore.MAnnotation} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected MAnnotationItemProvider mAnnotationItemProvider;
+  protected MecoreItemProviderAdapter mAnnotationItemProvider;
 
   /**
    * This creates an adapter for a {@link org.emftext.language.mecore.MAnnotation}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public Adapter createMAnnotationAdapter()
   {
     if (mAnnotationItemProvider == null)
     {
-      mAnnotationItemProvider = new MAnnotationItemProvider(this);
+      mAnnotationItemProvider = new MecoreItemProviderAdapter(this);
     }
 
     return mAnnotationItemProvider;
@@ -518,22 +518,22 @@ public class MecoreItemProviderAdapterFactory extends MecoreAdapterFactory imple
    * This keeps track of the one adapter used for all {@link org.emftext.language.mecore.MAnnotationEntry} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected MAnnotationEntryItemProvider mAnnotationEntryItemProvider;
+  protected MecoreItemProviderAdapter mAnnotationEntryItemProvider;
 
   /**
    * This creates an adapter for a {@link org.emftext.language.mecore.MAnnotationEntry}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public Adapter createMAnnotationEntryAdapter()
   {
     if (mAnnotationEntryItemProvider == null)
     {
-      mAnnotationEntryItemProvider = new MAnnotationEntryItemProvider(this);
+      mAnnotationEntryItemProvider = new MecoreItemProviderAdapter(this);
     }
 
     return mAnnotationEntryItemProvider;
@@ -543,22 +543,22 @@ public class MecoreItemProviderAdapterFactory extends MecoreAdapterFactory imple
    * This keeps track of the one adapter used for all {@link org.emftext.language.mecore.MAnnotationDefinition} instances.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
-  protected MAnnotationDefinitionItemProvider mAnnotationDefinitionItemProvider;
+  protected MecoreItemProviderAdapter mAnnotationDefinitionItemProvider;
 
   /**
    * This creates an adapter for a {@link org.emftext.language.mecore.MAnnotationDefinition}.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
+   * @generated NOT
    */
   @Override
   public Adapter createMAnnotationDefinitionAdapter()
   {
     if (mAnnotationDefinitionItemProvider == null)
     {
-      mAnnotationDefinitionItemProvider = new MAnnotationDefinitionItemProvider(this);
+      mAnnotationDefinitionItemProvider = new MecoreItemProviderAdapter(this);
     }
 
     return mAnnotationDefinitionItemProvider;
