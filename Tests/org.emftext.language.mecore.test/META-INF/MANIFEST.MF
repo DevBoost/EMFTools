@@ -4,6 +4,6 @@ Bundle-Name: Test
 Bundle-SymbolicName: org.emftext.language.mecore.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
-Require-Bundle: org.junit4,
+Require-Bundle: org.junit,
  org.emftext.language.mecore,
  org.emftext.language.mecore.resource.mecore
