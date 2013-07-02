@@ -72,4 +72,26 @@
 		</specification>
 	</extension>
 	
+	<extension point="org.eclipse.ui.commands">
+		<category description="All commands belonging to Efactory" id="org.emftext.language.efactory.resource.efactory.ui.command.category" name="Efactory">
+		</category>
+		<command categoryId="org.emftext.language.efactory.resource.efactory.ui.command.category" description="Toggle comment of the selected lines" id="org.emftext.language.efactory.resource.efactory.ui.command.togglecomment" name="Toggle Comment">
+		</command>
+	</extension>
+	
+	<extension point="org.eclipse.ui.handlers">
+		<handler class="org.emftext.language.efactory.resource.efactory.ui.EfactoryToggleCommentHandler" commandId="org.emftext.language.efactory.resource.efactory.ui.command.togglecomment">
+		</handler>
+	</extension>
+	
+	<extension point="org.eclipse.ui.contexts">
+		<context name="Editing Efactory Files" description="Editing Efactory Files Context" parentId="org.eclipse.ui.textEditorScope" id="org.emftext.language.efactory.resource.efactory.EditorScope">
+		</context>
+	</extension>
+	
+	<extension point="org.eclipse.ui.bindings">
+		<key sequence="M1+7" commandId="org.emftext.language.efactory.resource.efactory.ui.command.togglecomment" schemeId="org.eclipse.ui.defaultAcceleratorConfiguration" contextId="org.emftext.language.efactory.resource.efactory.EditorScope">
+		</key>
+	</extension>
+	
 </plugin>
