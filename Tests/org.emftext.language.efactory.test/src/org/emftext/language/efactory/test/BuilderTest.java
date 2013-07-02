@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -24,11 +24,7 @@ import junit.framework.TestCase;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.compare.diff.metamodel.DiffGroup;
-import org.eclipse.emf.compare.diff.metamodel.DiffModel;
-import org.eclipse.emf.compare.diff.service.DiffService;
-import org.eclipse.emf.compare.match.metamodel.MatchModel;
-import org.eclipse.emf.compare.match.service.MatchService;
+import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -40,8 +36,8 @@ import org.emftext.language.efactory.resource.efactory.mopp.EfactoryMetaInformat
 import org.emftext.language.efactory.resource.efactory.mopp.EfactoryResourceFactory;
 
 /**
- * A test that check whether the EFactory build does create
- * correct models from .efactory files.
+ * A test that check whether the EFactory build does create correct models from
+ * .efactory files.
  */
 public class BuilderTest extends TestCase {
 
@@ -106,16 +102,19 @@ public class BuilderTest extends TestCase {
 		EObject root = contents.get(0);
 		assertTrue(root instanceof Factory);
 		Factory factory = (Factory) root;
+		
 		// build model
 		Builder builder = new Builder();
 		List<EObject> builtModel = builder.build(factory, new HashMap<EObject, String>());
 		Resource tempResource = rs.createResource(URI.createURI("temp_resource_for_build_model.xmi"));
 		tempResource.getContents().addAll(builtModel);
+		
 		// load expected model
 		String pathToExpectedModel = absolutePath.substring(0, absolutePath.length() - EFACTORY_FILE_EXTENSION.length()) + ".xmi";
 		Resource expectedResource = rs.getResource(URI.createFileURI(pathToExpectedModel), true);
 		List<EObject> expectedContents = expectedResource.getContents();
 		assertEquals(builtModel.size(), expectedContents.size());
+		
 		// compare built model and expected one
 		try {
 			compareModels(builtModel, expectedContents);
@@ -127,11 +126,8 @@ public class BuilderTest extends TestCase {
 
 	private void compareModels(List<EObject> modelLeft, List<EObject> modelRight) throws Exception {
 		for (int i=0; i<modelLeft.size(); i++) {
-			MatchModel inputMatch = MatchService.doMatch(
-					modelLeft.get(i), modelRight.get(i), null);
-			DiffModel inputDiff = DiffService.doDiff(inputMatch);
-
-			if (((DiffGroup) inputDiff.getOwnedElements().get(0)).getSubchanges() != 0) {
+			Comparison result = new ModelComparator().compare(modelLeft.get(i), modelRight.get(i));
+			if (!result.getDifferences().isEmpty()) {
 				fail("Diff failed");
 			}	
 		}

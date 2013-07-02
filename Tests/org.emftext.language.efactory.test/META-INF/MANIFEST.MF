@@ -4,11 +4,10 @@ Bundle-Name: Test
 Bundle-SymbolicName: org.emftext.language.efactory.test
 Bundle-Version: 1.0.0.qualifier
 Export-Package: org.emftext.language.efactory.test
-Require-Bundle: org.junit4,
+Require-Bundle: org.junit,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.emf.compare,
- org.eclipse.emf.compare.diff,
- org.eclipse.emf.compare.match,
  org.emftext.language.efactory,
- org.emftext.language.efactory.resource.efactory
+ org.emftext.language.efactory.resource.efactory,
+ com.google.guava
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
