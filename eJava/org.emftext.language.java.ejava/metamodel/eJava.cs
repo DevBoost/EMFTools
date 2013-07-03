@@ -17,7 +17,7 @@ FOR <http://www.emftext.org/language/eJava>
 START EPackageWrapper
  
 IMPORTS {
-	java : <http://www.emftext.org/java> WITH SYNTAX java <../../org.emftext.language.java/metamodel/java.cs>
+	java : <http://www.emftext.org/java> WITH SYNTAX java <platform:/plugin/org.emftext.language.java/metamodel/java.cs>
 }
 
 OPTIONS {	
