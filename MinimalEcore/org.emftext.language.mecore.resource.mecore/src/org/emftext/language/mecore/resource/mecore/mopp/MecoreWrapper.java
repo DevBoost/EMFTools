@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -16,7 +16,6 @@
 package org.emftext.language.mecore.resource.mecore.mopp;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,10 +55,12 @@ import org.emftext.language.mecore.MPackage;
 import org.emftext.language.mecore.MParameter;
 import org.emftext.language.mecore.MSimpleMultiplicity;
 import org.emftext.language.mecore.MSimpleMultiplicityValue;
-import org.emftext.language.mecore.MSuperTypeReference;
 import org.emftext.language.mecore.MType;
+import org.emftext.language.mecore.MTypeArgument;
 import org.emftext.language.mecore.MTypeParameter;
+import org.emftext.language.mecore.MTypeReference;
 import org.emftext.language.mecore.MTypedElement;
+import org.emftext.language.mecore.MWildcard;
 import org.emftext.language.mecore.resource.mecore.IMecoreCommand;
 
 /**
@@ -68,6 +69,7 @@ import org.emftext.language.mecore.resource.mecore.IMecoreCommand;
  */
 public class MecoreWrapper {
 
+	private static final EcoreFactory ECORE_FACTORY = EcoreFactory.eINSTANCE;
 	private static final String ANNOTATION_SOURCE = MecoreWrapper.class
 			.getName();
 	private static final String COMMENT_KEY = "WARNING";
@@ -159,7 +161,7 @@ public class MecoreWrapper {
 			String key, String value) {
 		EAnnotation eAnnotation = element.getEAnnotation(source);
 		if (eAnnotation == null) {
-			eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
+			eAnnotation = ECORE_FACTORY.createEAnnotation();
 			eAnnotation.setSource(source);
 			element.getEAnnotations().add(eAnnotation);
 		}
@@ -167,7 +169,7 @@ public class MecoreWrapper {
 	}
 
 	private void addAnnotation(EModelElement element, String comment) {
-		EAnnotation eAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
+		EAnnotation eAnnotation = ECORE_FACTORY.createEAnnotation();
 		// TODO add reverse mapping
 		eAnnotation.setSource(ANNOTATION_SOURCE);
 		eAnnotation.getDetails().put(COMMENT_KEY, comment);
@@ -253,7 +255,7 @@ public class MecoreWrapper {
 
 			public boolean execute(Object context) {
 				// add local super types
-				for (MSuperTypeReference supertypeRef : mClass
+				for (MTypeReference supertypeRef : mClass
 						.getSuperTypeReferences()) {
 					wrapMSuperTypeReference(eClass, supertypeRef);
 				}
@@ -263,12 +265,13 @@ public class MecoreWrapper {
 		});
 	}
 
-	private EClass getSuperType(MSuperTypeReference supertypeRef) {
-		MClass mSupertype = supertypeRef.getSupertype();
+	private EClass getSuperType(MTypeReference supertypeRef) {
+		MType mSupertype = supertypeRef.getType();
 		if (mSupertype != null) {
 			return (EClass) primaryMapping.get(mSupertype);
 		}
-		EClass eSuperType = supertypeRef.getESupertype();
+		
+		EClass eSuperType = supertypeRef.getEType();
 		if (eSuperType != null) {
 			return eSuperType;
 		}
@@ -277,14 +280,20 @@ public class MecoreWrapper {
 
 	private void wrapMFeature(MFeature mFeature, EClass existingEClass) {
 		EStructuralFeature eFeature;
-		final MType mType = mFeature.getType();
+		MTypeReference mTypeRef = mFeature.getType();
+		if (mTypeRef == null) {
+			return;
+		}
+		
+		final MType mType = mTypeRef.getType();
 		if (mType == null) {
 			return;
 		}
+		
 		if (mType instanceof MClass) {
-			eFeature = createReference(mFeature, mType, existingEClass);
+			eFeature = createReference(mFeature, existingEClass, mTypeRef);
 		} else if (mType instanceof MDataType) {
-			eFeature = createAttribute(mFeature, existingEClass, mType);
+			eFeature = createAttribute(mFeature, existingEClass, mTypeRef);
 		} else if (mType instanceof MEnum) {
 			final EAttribute eAttribute = findOrCreateEAttribute(mFeature,
 					existingEClass);
@@ -297,9 +306,9 @@ public class MecoreWrapper {
 			});
 			eFeature = eAttribute;
 		} else if (mType instanceof MEcoreType) {
-			eFeature = createReference(mFeature, mType, existingEClass);
+			eFeature = createReference(mFeature, existingEClass, mTypeRef);
 		} else if (mType instanceof MTypeParameter) {
-			eFeature = createReference(mFeature, mType, existingEClass);
+			eFeature = createReference(mFeature, existingEClass, mTypeRef);
 		} else {
 			throw new RuntimeException("Found unknown subtype of MType: "
 					+ mType.eClass().getName());
@@ -312,18 +321,20 @@ public class MecoreWrapper {
 	}
 
 	private EStructuralFeature createAttribute(MFeature mFeature,
-			EClass existingEClass, final MType mType) {
+			EClass existingEClass, MTypeReference mTypeRef) {
+		
 		// primitive type, create attribute
 		EAttribute eAttribute = findOrCreateEAttribute(mFeature, existingEClass);
-		setType(eAttribute, mType, Collections.<MType> emptyList());
+		setType(eAttribute, mTypeRef);
 		return eAttribute;
 	}
 
 	private void wrapMOperation(MOperation mOperation, EClass existingEClass) {
-		final MType mType = mOperation.getType();
-		if (mType == null) {
+		final MTypeReference mTypeRef = mOperation.getType();
+		if (mTypeRef == null) {
 			return;
 		}
+		
 		final EOperation eOperation = findOrCreateEOperation(mOperation,
 				existingEClass);
 		addTypeParameters(mOperation, eOperation);
@@ -335,7 +346,7 @@ public class MecoreWrapper {
 		commands.add(new IMecoreCommand<Object>() {
 
 			public boolean execute(Object context) {
-				setType(eOperation, mType, Collections.<MType> emptyList());
+				setType(eOperation, mTypeRef);
 				return true;
 			}
 		});
@@ -389,7 +400,7 @@ public class MecoreWrapper {
 				return eTypeParameter;
 			}
 		}
-		final ETypeParameter newETypeParameter = EcoreFactory.eINSTANCE
+		final ETypeParameter newETypeParameter = ECORE_FACTORY
 				.createETypeParameter();
 		reverseMapping.put(newETypeParameter, typeParameter);
 		newETypeParameter.setName(mName);
@@ -412,30 +423,34 @@ public class MecoreWrapper {
 
 	private void setTypeBound(MTypeParameter mTypeParameter,
 			ETypeParameter eTypeParameter) {
-		MType lowerBound = mTypeParameter.getLowerBound();
-		if (lowerBound != null) {
-			EGenericType eLowerBound = EcoreFactory.eINSTANCE
-					.createEGenericType();
-			reverseMapping.put(eLowerBound, mTypeParameter);
-			eLowerBound.setEClassifier(getEType(lowerBound));
-			eTypeParameter.getEBounds().add(eLowerBound);
+		
+		MTypeReference lowerBound = mTypeParameter.getLowerBound();
+		if (lowerBound == null) {
+			return;
 		}
+		
+		MType lowerBoundType = lowerBound.getType();
+		EGenericType eLowerBound = ECORE_FACTORY.createEGenericType();
+		reverseMapping.put(eLowerBound, mTypeParameter);
+		eLowerBound.setEClassifier(getEType(lowerBoundType));
+		eTypeParameter.getEBounds().add(eLowerBound);
 	}
 
 	private void wrapMParameter(MParameter mParameter,
 			EOperation existingOperation) {
-		final MType mType = mParameter.getType();
-		if (mType == null) {
+		
+		final MTypeReference mTypeRef = mParameter.getType();
+		if (mTypeRef == null) {
 			return;
 		}
-		final List<MType> typeArguments = mParameter.getTypeArguments();
+		
 		final EParameter eParameter = findOrCreateEParameter(mParameter,
 				existingOperation);
 
 		commands.add(new IMecoreCommand<Object>() {
 
 			public boolean execute(Object context) {
-				setType(eParameter, mType, typeArguments);
+				setType(eParameter, mTypeRef);
 				return true;
 			}
 		});
@@ -446,13 +461,14 @@ public class MecoreWrapper {
 	}
 
 	private EStructuralFeature createReference(final MFeature mFeature,
-			final MType mType, EClass eClass) {
+			EClass eClass, final MTypeReference mTypeRef) {
+		
 		// complex type, create reference
 		final EReference eReference = findOrCreateEReference(mFeature, eClass);
 		commands.add(new IMecoreCommand<Object>() {
 
 			public boolean execute(Object context) {
-				setType(eReference, mType, Collections.<MType> emptyList());
+				setType(eReference, mTypeRef);
 				MFeature opposite = mFeature.getOpposite();
 				if (opposite != null) {
 					eReference.setEOpposite((EReference) primaryMapping
@@ -513,7 +529,7 @@ public class MecoreWrapper {
 		}
 
 		// if we can't find an existing EPackage, we need to create a fresh one
-		EPackage ePackage = EcoreFactory.eINSTANCE.createEPackage();
+		EPackage ePackage = ECORE_FACTORY.createEPackage();
 		reverseMapping.put(ePackage, mPackage);
 
 		addAnnotation(ePackage, COMMENT_VALUE);
@@ -538,7 +554,7 @@ public class MecoreWrapper {
 		}
 
 		// if we can't find an existing EClass, we need to create a fresh one
-		EClass eClass = EcoreFactory.eINSTANCE.createEClass();
+		EClass eClass = ECORE_FACTORY.createEClass();
 		reverseMapping.put(eClass, mClass);
 		addAnnotation(eClass, COMMENT_VALUE);
 		ePackage.getEClassifiers().add(eClass);
@@ -559,7 +575,7 @@ public class MecoreWrapper {
 		}
 
 		// if we can't find an existing EEnum, we need to create a fresh one
-		EEnum eEnum = EcoreFactory.eINSTANCE.createEEnum();
+		EEnum eEnum = ECORE_FACTORY.createEEnum();
 		reverseMapping.put(eEnum, mEnum);
 		addAnnotation(eEnum, COMMENT_VALUE);
 		ePackage.getEClassifiers().add(eEnum);
@@ -582,7 +598,7 @@ public class MecoreWrapper {
 
 		// if we can't find an existing EEnumLiteral, we need to create a fresh
 		// one
-		EEnumLiteral eEnumLiteral = EcoreFactory.eINSTANCE.createEEnumLiteral();
+		EEnumLiteral eEnumLiteral = ECORE_FACTORY.createEEnumLiteral();
 		reverseMapping.put(eEnumLiteral, mEnumLiteral);
 		addAnnotation(eEnumLiteral, COMMENT_VALUE);
 		existingEnum.getELiterals().add(eEnumLiteral);
@@ -605,7 +621,7 @@ public class MecoreWrapper {
 
 		// if we can't find an existing EAttribute, we need to create a fresh
 		// one
-		EAttribute eAttribute = EcoreFactory.eINSTANCE.createEAttribute();
+		EAttribute eAttribute = ECORE_FACTORY.createEAttribute();
 		reverseMapping.put(eAttribute, mFeature);
 		addAnnotation(eAttribute, COMMENT_VALUE);
 		existingEClass.getEStructuralFeatures().add(eAttribute);
@@ -628,7 +644,7 @@ public class MecoreWrapper {
 
 		// if we can't find an existing EReference, we need to create a fresh
 		// one
-		EReference eReference = EcoreFactory.eINSTANCE.createEReference();
+		EReference eReference = ECORE_FACTORY.createEReference();
 		reverseMapping.put(eReference, mFeature);
 
 		addAnnotation(eReference, COMMENT_VALUE);
@@ -661,7 +677,7 @@ public class MecoreWrapper {
 
 		// if we can't find an existing EOperation, we need to create a fresh
 		// one
-		EOperation eOperation = EcoreFactory.eINSTANCE.createEOperation();
+		EOperation eOperation = ECORE_FACTORY.createEOperation();
 		reverseMapping.put(eOperation, mOperation);
 
 		addAnnotation(eOperation, COMMENT_VALUE);
@@ -694,7 +710,7 @@ public class MecoreWrapper {
 
 		// if we can't find an existing EParameter, we need to create a fresh
 		// one
-		EParameter eParameter = EcoreFactory.eINSTANCE.createEParameter();
+		EParameter eParameter = ECORE_FACTORY.createEParameter();
 		reverseMapping.put(eParameter, mParameter);
 
 		addAnnotation(eParameter, COMMENT_VALUE);
@@ -735,8 +751,15 @@ public class MecoreWrapper {
 		}
 	}
 
-	private void setType(ETypedElement eTypedElement, MType mType,
-			List<MType> mTypeArguments) {
+	private void setType(ETypedElement eTypedElement, MTypeReference mTypeRef) {
+		
+		List<MTypeArgument> mTypeArguments = mTypeRef.getTypeArguments();
+		
+		MType mType = mTypeRef.getType();
+		if (mType == null) {
+			return;
+		}
+		
 		EClassifier eType = getEType(mType);
 		EGenericType eGenericType = getGenericEType(mType);
 
@@ -749,7 +772,7 @@ public class MecoreWrapper {
 			}
 		} else {
 			if (eGenericType == null) {
-				eGenericType = EcoreFactory.eINSTANCE.createEGenericType();
+				eGenericType = ECORE_FACTORY.createEGenericType();
 				reverseMapping.put(eGenericType, mType);
 			}
 			if (eType != null) {
@@ -757,15 +780,23 @@ public class MecoreWrapper {
 			}
 			List<EGenericType> eTypeArguments = eGenericType
 					.getETypeArguments();
-			for (MType mTypeArgument : mTypeArguments) {
-				eTypeArguments.add(createEGenericTypeParameter(mTypeArgument));
+			for (MTypeArgument mTypeArgument : mTypeArguments) {
+				if (mTypeArgument instanceof MTypeReference) {
+					MTypeReference mConcreteTypeReference = (MTypeReference) mTypeArgument;
+					MType nextMType = mConcreteTypeReference.getType();
+					eTypeArguments.add(createEGenericTypeParameter(nextMType));
+				} else if (mTypeArgument instanceof MWildcard) {
+					// TODO?
+					System.out.println("MecoreWrapper.setType() found wildcard");
+					eTypeArguments.add(ECORE_FACTORY.createEGenericType());
+				}
 			}
 			eTypedElement.setEGenericType(eGenericType);
 		}
 	}
 
 	private EGenericType createEGenericTypeParameter(MType mType) {
-		EGenericType genericType = EcoreFactory.eINSTANCE.createEGenericType();
+		EGenericType genericType = ECORE_FACTORY.createEGenericType();
 		reverseMapping.put(genericType, mType);
 		ETypeParameter eTypeParameter = (ETypeParameter) primaryMapping
 				.get(mType);
@@ -774,7 +805,7 @@ public class MecoreWrapper {
 	}
 
 	private void wrapMSuperTypeReference(final EClass eClass,
-			MSuperTypeReference supertypeRef) {
+			MTypeReference supertypeRef) {
 		List<EClass> eSuperTypes = eClass.getESuperTypes();
 		List<EGenericType> eGenericSuperTypes = eClass.getEGenericSuperTypes();
 
@@ -782,28 +813,33 @@ public class MecoreWrapper {
 		if (eSuperType == null) {
 			return;
 		}
-		List<MType> mTypeArguments = supertypeRef.getTypeArguments();
+		
+		List<MTypeArgument> mTypeArguments = supertypeRef.getTypeArguments();
 		if (mTypeArguments.isEmpty()) {
 			// this is a non-generic super type
 			if (!eSuperTypes.contains(eSuperType)) {
 				eSuperTypes.add(eSuperType);
 			}
 		} else {
-			EGenericType eGenericSuperType = EcoreFactory.eINSTANCE
+			EGenericType eGenericSuperType = ECORE_FACTORY
 					.createEGenericType();
 			reverseMapping.put(eGenericSuperType, supertypeRef);
 
 			eGenericSuperType.setEClassifier(eSuperType);
 			eGenericSuperTypes.add(eGenericSuperType);
 
-			for (MType mTypeArgument : mTypeArguments) {
-				EGenericType eTypeArgument = EcoreFactory.eINSTANCE
-						.createEGenericType();
-				reverseMapping.put(eTypeArgument, supertypeRef);
+			for (MTypeArgument mTypeArgument : mTypeArguments) {
+				if (mTypeArgument instanceof MTypeReference) {
+					MTypeReference mTypeReference = (MTypeReference) mTypeArgument;
+					MType nextMType = mTypeReference.getType();
+					EGenericType eTypeArgument = ECORE_FACTORY
+							.createEGenericType();
+					reverseMapping.put(eTypeArgument, supertypeRef);
 
-				EClassifier eType = getEType(mTypeArgument);
-				eTypeArgument.setEClassifier(eType);
-				eGenericSuperType.getETypeArguments().add(eTypeArgument);
+					EClassifier eType = getEType(nextMType);
+					eTypeArgument.setEClassifier(eType);
+					eGenericSuperType.getETypeArguments().add(eTypeArgument);
+				}
 			}
 		}
 	}

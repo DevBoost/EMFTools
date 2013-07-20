@@ -59,27 +59,29 @@ RULES {
 	             (":" superTypeReferences ("," superTypeReferences)* )? 
 	             (#1 "(" (!1 features)* (!1 operations)* !0 ")")? !0;
 
-	MSuperTypeReference ::= 
-				(supertype[UPPER] | eSupertype[LOWER]) 
-				("<" typeArguments[UPPER] ("," typeArguments[UPPER])* ">")?;
+	MTypeReference ::= 
+				(type[UPPER] | eType[LOWER]) 
+				("<" typeArguments ("," typeArguments)* ">")?;
 				
-	MTypeParameter ::= name[UPPER] (":" lowerBound[UPPER])?;
+	MTypeParameter ::= name[UPPER] (":" lowerBound)?;
 	
 	@SuppressWarnings(featureWithoutSyntax, optionalKeyword)
 	MEnum    ::= annotations* "enum" name[UPPER] ("(" literals* ")")?;
 	MEnumLiteral ::= annotations* name[UPPER] literal['"','"']?;
 	
-	MFeature ::= annotations* ncReference["~" : ""] name[LOWER] (type[UPPER]|type[LOWER]) multiplicity? ("<>" opposite[UPPER])?;
+	MFeature ::= annotations* ncReference["~" : ""] name[LOWER] type multiplicity? ("<>" opposite[UPPER])?;
 	
 	MOperation ::= annotations*  
 		("<" typeParameters ("," typeParameters)* ">")?
 		name[LOWER] 
-		"(" (parameters ("," parameters)*)? ")" (type[UPPER]|type[LOWER]) multiplicity?;
+		"(" (parameters ("," parameters)*)? ")" type multiplicity?;
 		
-	MParameter ::= name[LOWER] (type[UPPER]|type[LOWER])
-		("<" typeArguments[UPPER] ("," typeArguments[UPPER])* ">")? 
+	MParameter ::= name[LOWER] type
+		("<" typeArguments ("," typeArguments)* ">")? 
 		multiplicity?;
 	
 	MSimpleMultiplicity ::= value[star : "*", optional : "?", plus : "+"];
 	MComplexMultiplicity ::= "(" lowerBound[INTEGER] ".." upperBound[INTEGER] ")";
+	
+	MWildcard ::= "?";
 }

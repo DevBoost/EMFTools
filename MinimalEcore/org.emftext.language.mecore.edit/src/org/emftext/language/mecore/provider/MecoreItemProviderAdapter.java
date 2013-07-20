@@ -61,7 +61,7 @@ import org.emftext.language.mecore.MNamedElement;
 import org.emftext.language.mecore.MOperation;
 import org.emftext.language.mecore.MSimpleMultiplicity;
 import org.emftext.language.mecore.MSimpleMultiplicityValue;
-import org.emftext.language.mecore.MSuperTypeReference;
+import org.emftext.language.mecore.MTypeReference;
 import org.emftext.language.mecore.MTypedElement;
 import org.emftext.language.mecore.MecorePackage;
 
@@ -168,7 +168,7 @@ public class MecoreItemProviderAdapter
 					className = "Reference";
 				}
 			}
-			if (eObject instanceof MSuperTypeReference) {
+			if (eObject instanceof MTypeReference) {
 				className = "GenericSuperType";
 			}
 			String overlay = null;

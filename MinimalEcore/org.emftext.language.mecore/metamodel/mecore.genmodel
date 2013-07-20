@@ -80,9 +80,10 @@
     <genClasses ecoreClass="mecore.ecore#//MTypeArgumentable">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MTypeArgumentable/typeArguments"/>
     </genClasses>
-    <genClasses ecoreClass="mecore.ecore#//MSuperTypeReference">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MSuperTypeReference/supertype"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MSuperTypeReference/eSupertype"/>
+    <genClasses ecoreClass="mecore.ecore#//MTypeArgument"/>
+    <genClasses ecoreClass="mecore.ecore#//MTypeReference">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MTypeReference/type"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MTypeReference/eType"/>
     </genClasses>
     <genClasses image="false" ecoreClass="mecore.ecore#//MCommentable">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MCommentable/comment"/>
@@ -99,5 +100,6 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationDefinition/source"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MAnnotationDefinition/name"/>
     </genClasses>
+    <genClasses ecoreClass="mecore.ecore#//MWildcard"/>
   </genPackages>
 </genmodel:GenModel>

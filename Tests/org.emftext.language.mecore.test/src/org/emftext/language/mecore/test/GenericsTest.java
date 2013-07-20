@@ -17,6 +17,7 @@ package org.emftext.language.mecore.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -26,6 +27,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EGenericType;
 import org.eclipse.emf.ecore.EPackage;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypeParameter;
 import org.eclipse.emf.ecore.resource.Resource.Diagnostic;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -112,8 +114,38 @@ public class GenericsTest {
 		assertEquals(lowerBound, namedElementClassifier);
 	}
 
+	@Test
+	public void testWildcard() {
+		
+		String exampleModel = 
+				"test <http://www.test.org/>\n" +
+				"ClassA ( clazz EJavaClass<?> )";
+
+		EPackage ePackage = createAndWrapModel(exampleModel);
+		
+		EClassifier classifierA = ePackage.getEClassifier("ClassA");
+		assertNotNull(classifierA);
+
+		assertTrue(classifierA instanceof EClass);
+		EClass classA = (EClass) classifierA;
+
+		EStructuralFeature clazzFeature = classA.getEStructuralFeature("clazz");
+		assertNotNull(clazzFeature);
+		
+		EGenericType eGenericType = clazzFeature.getEGenericType();
+		assertNotNull(eGenericType);
+		
+		List<EGenericType> eTypeArguments = eGenericType.getETypeArguments();
+		assertEquals("Feature 'clazz' must have one type argument.", 1, eTypeArguments.size());
+		
+		EGenericType firstArgument = eTypeArguments.get(0);
+		assertNull("First argument must not have classified set (don't care wildcard).", firstArgument.getEClassifier());
+	}
+
 	private EPackage createAndWrapModel(String exampleModel) {
 		MPackage mPackage = MecoreResourceUtil.getResourceContent(exampleModel);
+		assertNotNull("Example model contains syntax errors.", mPackage);
+		
 		EcoreUtil.resolveAll(mPackage);
 		
 		List<Diagnostic> errors = mPackage.eResource().getErrors();

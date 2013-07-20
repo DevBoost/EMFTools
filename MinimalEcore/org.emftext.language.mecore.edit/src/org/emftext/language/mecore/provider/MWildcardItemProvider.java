@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2006-2012
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
@@ -12,20 +12,7 @@
  *   Software Technology Group - TU Dresden, Germany;
  *   DevBoost GmbH - Berlin, Germany
  *      - initial API and implementation
- ******************************************************************************/
-/**
- * Copyright (c) 2006-2011
- * Software Technology Group, Dresden University of Technology
- * 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0 
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- * 
- * Contributors:
- *   Software Technology Group - TU Dresden, Germany 
- *      - initial API and implementation
- * 
+ *  
  */
 package org.emftext.language.mecore.provider;
 
@@ -43,13 +30,13 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
- * This is the item provider adapter for a {@link org.emftext.language.mecore.MType} object.
+ * This is the item provider adapter for a {@link org.emftext.language.mecore.MWildcard} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class MTypeItemProvider
-	extends MModelElementItemProvider
+public class MWildcardItemProvider
+	extends MTypeArgumentItemProvider
 	implements
 		IEditingDomainItemProvider,
 		IStructuredItemContentProvider,
@@ -62,7 +49,7 @@ public class MTypeItemProvider
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public MTypeItemProvider(AdapterFactory adapterFactory) {
+	public MWildcardItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -82,6 +69,17 @@ public class MTypeItemProvider
 	}
 
 	/**
+	 * This returns MWildcard.gif.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Object getImage(Object object) {
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/MWildcard"));
+	}
+
+	/**
 	 * This returns the label text for the adapted class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -89,7 +87,7 @@ public class MTypeItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		return getString("_UI_MType_type");
+		return getString("_UI_MWildcard_type");
 	}
 
 	/**
