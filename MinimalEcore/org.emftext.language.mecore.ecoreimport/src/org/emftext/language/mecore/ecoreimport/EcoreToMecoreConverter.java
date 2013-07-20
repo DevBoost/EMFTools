@@ -34,6 +34,7 @@ import org.emftext.language.mecore.MPackage;
 import org.emftext.language.mecore.MSimpleMultiplicity;
 import org.emftext.language.mecore.MSimpleMultiplicityValue;
 import org.emftext.language.mecore.MType;
+import org.emftext.language.mecore.MTypeReference;
 import org.emftext.language.mecore.MecoreFactory;
 
 /**
@@ -107,7 +108,9 @@ public class EcoreToMecoreConverter {
 			public void run() {
 				EClassifier eType = eFeature.getEType();
 				MType mType = getMType(eType);
-				mFeature.setType(mType);
+				MTypeReference mTypeRef = factory.createMTypeReference();
+				mTypeRef.setType(mType);
+				mFeature.setType(mTypeRef);
 			}
 		});
 		
