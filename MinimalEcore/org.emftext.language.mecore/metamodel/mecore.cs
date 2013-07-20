@@ -60,7 +60,7 @@ RULES {
 	             (#1 "(" (!1 features)* (!1 operations)* !0 ")")? !0;
 
 	MTypeReference ::= 
-				(type[UPPER] | eType[LOWER]) 
+				(type[UPPER] | type[LOWER]) 
 				("<" typeArguments ("," typeArguments)* ">")?;
 				
 	MTypeParameter ::= name[UPPER] (":" lowerBound)?;

@@ -96,7 +96,6 @@
   <eClassifiers xsi:type="ecore:EClass" name="MTypeArgument"/>
   <eClassifiers xsi:type="ecore:EClass" name="MTypeReference" eSuperTypes="#//MModelElement #//MTypeArgument #//MTypeArgumentable">
     <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//MType"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eType" eType="ecore:EClass platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EClass"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MCommentable" abstract="true">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/Ecore.ecore#//EString"/>

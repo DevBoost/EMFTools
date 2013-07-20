@@ -83,7 +83,6 @@
     <genClasses ecoreClass="mecore.ecore#//MTypeArgument"/>
     <genClasses ecoreClass="mecore.ecore#//MTypeReference">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MTypeReference/type"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference mecore.ecore#//MTypeReference/eType"/>
     </genClasses>
     <genClasses image="false" ecoreClass="mecore.ecore#//MCommentable">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute mecore.ecore#//MCommentable/comment"/>

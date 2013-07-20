@@ -271,10 +271,12 @@ public class MecoreWrapper {
 			return (EClass) primaryMapping.get(mSupertype);
 		}
 		
+		/*
 		EClass eSuperType = supertypeRef.getEType();
 		if (eSuperType != null) {
 			return eSuperType;
 		}
+		*/
 		return null;
 	}
 
