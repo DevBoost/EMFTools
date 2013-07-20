@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -15,9 +15,12 @@
  ******************************************************************************/
 package org.emftext.language.mecore.test;
 
-import java.util.List;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 
-import junit.framework.TestCase;
+import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EClassifier;
@@ -29,9 +32,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.emftext.language.mecore.MPackage;
 import org.emftext.language.mecore.resource.mecore.mopp.MecoreWrapper;
 import org.emftext.language.mecore.resource.mecore.util.MecoreResourceUtil;
+import org.junit.Test;
 
-public class GenericsTest extends TestCase {
+public class GenericsTest {
 
+	@Test
 	public void testBuildingGenerics1() {
 		// create test model in memory
 		String exampleModel = 
@@ -73,6 +78,7 @@ public class GenericsTest extends TestCase {
 		assertEquals("Super type of IntegerProperty must have one type argument.", 1, typeArguments.size());
 	}
 	
+	@Test
 	public void testBuildingGenerics2() {
 		
 		String exampleModel = 
