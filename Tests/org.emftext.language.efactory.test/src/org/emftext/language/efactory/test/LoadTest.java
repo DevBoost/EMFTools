@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -15,12 +15,13 @@
  ******************************************************************************/
 package org.emftext.language.efactory.test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
-
-import junit.framework.TestCase;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -36,8 +37,9 @@ import org.emftext.language.efactory.builder.Builder;
 import org.emftext.language.efactory.resource.efactory.mopp.EfactoryMetaInformation;
 import org.emftext.language.efactory.resource.efactory.mopp.EfactoryResourceFactory;
 import org.junit.Ignore;
+import org.junit.Test;
 
-public class LoadTest extends TestCase {
+public class LoadTest {
 
 	private final static String EFACTORY_EXTENSION = new EfactoryMetaInformation().getSyntaxName();
 	
@@ -52,15 +54,18 @@ public class LoadTest extends TestCase {
 				new EfactoryResourceFactory());
 	}
 
+	@Test
 	public void testEnumModel() throws IOException {
 		testLoadModel("enumtest.efactory");
 		testLoadModel("enumtest2.efactory");
 	}
 	
+	@Test
 	public void testLoadSmallModel() throws IOException {
 		testLoadModel("small.efactory");
 	}
 	
+	@Test
 	@Ignore("Ignored because this test must be moved to a separate performance test plug-in.")
 	public void testLoadLargeModel() throws IOException {
 		testLoadModel("large.efactory");
