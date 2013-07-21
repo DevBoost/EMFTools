@@ -35,6 +35,7 @@ import org.emftext.language.efactory.Factory;
 import org.emftext.language.efactory.builder.Builder;
 import org.emftext.language.efactory.resource.efactory.mopp.EfactoryMetaInformation;
 import org.emftext.language.efactory.resource.efactory.mopp.EfactoryResourceFactory;
+import org.junit.Ignore;
 
 public class LoadTest extends TestCase {
 
@@ -60,6 +61,7 @@ public class LoadTest extends TestCase {
 		testLoadModel("small.efactory");
 	}
 	
+	@Ignore("Ignored because this test must be moved to a separate performance test plug-in.")
 	public void testLoadLargeModel() throws IOException {
 		testLoadModel("large.efactory");
 	}
