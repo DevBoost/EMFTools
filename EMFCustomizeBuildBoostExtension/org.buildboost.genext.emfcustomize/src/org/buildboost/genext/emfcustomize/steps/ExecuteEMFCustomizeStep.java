@@ -67,7 +67,7 @@ public class ExecuteEMFCustomizeStep extends AbstractAntTargetGenerator {
 		sb.append(IConstants.NL);
 		
 		sb.append("<echo message=\"Refactoring generated EMF factory for customization " + genModelPath + "\" />");
-		sb.append("<java classname=\"de.devboost.emfcustomize.app.EMFCustomizeApplication\" failonerror=\"true\">");
+		sb.append("<java classname=\"de.devboost.emfcustomize.app.EMFCustomizeApplication\" failonerror=\"true\" fork=\"true\" >");
 		sb.append("<arg value=\"" + genModelPath + "\"/>");
 		sb.append("<arg value=\"" + pluginsLocation + "\"/>");
 		sb.append("<arg value=\"" + runtimeClasspath + srcDirs + "\"/>");
