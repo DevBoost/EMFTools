@@ -3,7 +3,7 @@
 	id="org.emftext.language.mecore"
 	label="MinimalEcore"
 	provider-name="DevBoost GmbH" 
-	version="0.0.0">
+	version="0.1.0">
 
    <description>MinimalEcore is a compact textual syntax for Ecore models.</description>
 

@@ -3,7 +3,7 @@
 	id="org.emftext.language.efactory"
 	label="EFactory"
 	provider-name="DevBoost GmbH"
-	version="0.0.0">
+	version="0.1.0">
 
    <description>EFactory is a generic language to create instances of arbitrary Ecore models. Textual models are automatically saved as XMI files by the EFactory builder.</description>
 

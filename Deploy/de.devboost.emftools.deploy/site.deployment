@@ -2,5 +2,3 @@ site/vendor = DevBoost GmbH
 site/uploadPath = www.devboost.de:/home/jenkins/emftools/update_trunk
 site/usernameProperty = DEVBOOST_UPLOAD_USER
 site/passwordProperty = DEVBOOST_UPLOAD_PASS
-
-site/version = 1.0.0

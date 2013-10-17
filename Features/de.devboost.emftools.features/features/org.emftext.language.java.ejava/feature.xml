@@ -3,7 +3,7 @@
 	id="org.emftext.language.java.ejava"
 	label="eJava: Specification Language for eOperations"
 	provider-name="DevBoost GmbH"
-	version="0.0.0">
+	version="0.1.0">
 
    <description>eJava is a specification language for eOperation bodys in Ecore models.</description>
 

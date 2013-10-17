@@ -3,7 +3,7 @@
 	id="org.emftext.language.emfdoc"
 	label="EMFDoc"
 	provider-name="DevBoost GmbH"
-	version="0.0.0">
+	version="0.1.0">
 
    <description>EMFDoc can be used to document Ecore models.</description>
 
