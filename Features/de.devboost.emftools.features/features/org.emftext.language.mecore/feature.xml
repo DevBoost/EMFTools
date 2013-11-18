@@ -3,15 +3,15 @@
 	id="org.emftext.language.mecore"
 	label="MinimalEcore"
 	provider-name="DevBoost GmbH" 
-	version="0.1.0">
+	version="0.3.0">
 
    <description>MinimalEcore is a compact textual syntax for Ecore models.</description>
 
-   <copyright>Copyright (c) 2006-2012 Software Technology Group, Dresden University of Technology, Germany; DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.</copyright>
+   <copyright>Copyright (c) 2006-2013 Software Technology Group, Dresden University of Technology, Germany; DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.</copyright>
 
    <license>Eclipse Public License v1.0
 
-Copyright (c) 2006-2012
+Copyright (c) 2006-2013
 Software Technology Group, Dresden University of Technology
 DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.
 
