@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  *
@@ -13,37 +13,45 @@
  *   DevBoost GmbH - Berlin, Germany
  *      - initial API and implementation
  ******************************************************************************/
-
 package org.emftext.language.java.ejava.resource.ejava.mopp;
 
+import java.util.Map;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.IResourceVisitor;
+import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.emftext.language.java.ejava.resource.ejava.EjavaEProblemType;
+import org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder;
 
-public class EjavaBuilderAdapter extends org.eclipse.core.resources.IncrementalProjectBuilder implements org.eclipse.core.resources.IResourceDeltaVisitor, org.eclipse.core.resources.IResourceVisitor {
+public class EjavaBuilderAdapter extends IncrementalProjectBuilder implements IResourceDeltaVisitor, IResourceVisitor {
 	
 	/**
 	 * The ID of the default, generated builder.
 	 */
-	public final static String BUILDER_ID = "org.emftext.language.java.ejava.resource.ejava.builder";
+	public final static String BUILDER_ID = "builder";
 	
-	private org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder defaultBuilder = new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaBuilder();
-	
-	/**
-	 * This resource set is used during the whole build.
-	 */
-	//private org.eclipse.emf.ecore.resource.ResourceSet resourceSet;
+	private IEjavaBuilder defaultBuilder = new EjavaBuilder();
 	
 	/**
 	 * This monitor is used during the build.
 	 */
-	private org.eclipse.core.runtime.IProgressMonitor monitor;
+	private IProgressMonitor monitor;
 	
-	public org.eclipse.core.resources.IProject[] build(int kind, java.util.Map<String, String> args, final org.eclipse.core.runtime.IProgressMonitor monitor) throws org.eclipse.core.runtime.CoreException {
+	public IProject[] build(int kind, Map<String, String> args, final IProgressMonitor monitor) throws CoreException {
 		// Set context for build
 		this.monitor = monitor;
-		//this.resourceSet = new org.eclipse.emf.ecore.resource.impl.ResourceSetImpl();
+
 		// Perform build by calling the resource visitors
-		org.eclipse.core.resources.IResourceDelta delta = getDelta(getProject());
+		IResourceDelta delta = getDelta(getProject());
 		if (delta != null) {
 			// This is an incremental build
 			delta.accept(this);
@@ -51,83 +59,87 @@ public class EjavaBuilderAdapter extends org.eclipse.core.resources.IncrementalP
 			// This is a full build
 			getProject().accept(this);
 		}
+
 		// Reset build context
-		//this.resourceSet = null;
 		this.monitor = null;
 		return null;
 	}
 	
-	public void build(org.eclipse.core.resources.IFile resource, org.eclipse.emf.ecore.resource.ResourceSet resourceSet, org.eclipse.core.runtime.IProgressMonitor monitor) {
-		// we must catch exception to avoid problem with the build process if
-		// something goes wrong with eJava
+	public void build(IFile resource, ResourceSet resourceSet, IProgressMonitor monitor) {
+		// We must catch exceptions to avoid problem with the build process if
+		// something goes wrong with eJava.
 		try {
-			org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-			org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder builder = getBuilder();
+			URI uri = URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+			IEjavaBuilder builder = getBuilder();
 			if (builder.isBuildingNeeded(uri)) {
-				org.emftext.language.java.ejava.resource.ejava.mopp.EjavaResource customResource = (org.emftext.language.java.ejava.resource.ejava.mopp.EjavaResource) resourceSet.getResource(uri, true);
-				new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMarkerHelper().removeAllMarkers(resource, getBuilderMarkerId());
+				EjavaResource customResource = (EjavaResource) resourceSet.getResource(uri, true);
+				new EjavaMarkerHelper().removeAllMarkers(resource, getBuilderMarkerId());
 				builder.build(customResource, monitor);
 			}
 		} catch (Throwable e) {
-			// TODO: handle exception
-			e.printStackTrace();
+			EjavaPlugin.logWarning("Exception while processing eJava file.", e);
 		}
 	}
 	
 	/**
-	 * Returns the builder that shall be used by this adapter. This allows subclasses
-	 * to perform builds with different builders.
+	 * Returns the builder that shall be used by this adapter. This allows
+	 * subclasses to perform builds with different builders.
 	 */
-	public org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder getBuilder() {
+	public IEjavaBuilder getBuilder() {
 		return defaultBuilder;
 	}
 	
 	/**
-	 * Returns the id for the markers that are created by this builder. This allows
-	 * subclasses to produce different kinds of markers.
+	 * Returns the id for the markers that are created by this builder. This
+	 * allows subclasses to produce different kinds of markers.
 	 */
 	public String getBuilderMarkerId() {
-		return new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMarkerHelper().getMarkerID(org.emftext.language.java.ejava.resource.ejava.EjavaEProblemType.BUILDER_ERROR);
+		return new EjavaMarkerHelper().getMarkerID(EjavaEProblemType.BUILDER_ERROR);
 	}
 	
 	/**
 	 * Runs the task item builder to search for new task items in changed resources.
 	 */
-	public void runTaskItemBuilder(org.eclipse.core.resources.IFile resource, org.eclipse.emf.ecore.resource.ResourceSet resourceSet, org.eclipse.core.runtime.IProgressMonitor monitor) {
-		org.emftext.language.java.ejava.resource.ejava.mopp.EjavaTaskItemBuilder taskItemBuilder = new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaTaskItemBuilder();
-		new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMarkerHelper().removeAllMarkers(resource, taskItemBuilder.getBuilderMarkerId());
+	public void runTaskItemBuilder(IFile resource, ResourceSet resourceSet, IProgressMonitor monitor) {
+		EjavaTaskItemBuilder taskItemBuilder = new EjavaTaskItemBuilder();
+		new EjavaMarkerHelper().removeAllMarkers(resource, taskItemBuilder.getBuilderMarkerId());
 		taskItemBuilder.build(resource, resourceSet, monitor);
 	}
 	
 	@Override	
-	public boolean visit(org.eclipse.core.resources.IResourceDelta delta) throws org.eclipse.core.runtime.CoreException {
-		org.eclipse.core.resources.IResource resource = delta.getResource();
-		return doVisit(resource, delta.getKind() == org.eclipse.core.resources.IResourceDelta.REMOVED);
+	public boolean visit(IResourceDelta delta) throws CoreException {
+		IResource resource = delta.getResource();
+		return doVisit(resource, delta.getKind() == IResourceDelta.REMOVED);
 	}
 	
 	@Override	
-	public boolean visit(org.eclipse.core.resources.IResource resource) throws org.eclipse.core.runtime.CoreException {
+	public boolean visit(IResource resource) throws CoreException {
 		return doVisit(resource, false);
 	}
 	
-	protected boolean doVisit(org.eclipse.core.resources.IResource resource, boolean removed) throws org.eclipse.core.runtime.CoreException {
+	protected boolean doVisit(IResource resource, boolean removed) throws CoreException {
 		if (removed) {
-			org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
-			org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder builder = getBuilder();
+			URI uri = URI.createPlatformResourceURI(resource.getFullPath().toString(), true);
+			IEjavaBuilder builder = getBuilder();
 			if (builder.isBuildingNeeded(uri)) {
 				builder.handleDeletion(uri, monitor);
 			}
-			new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMarkerHelper().removeAllMarkers(resource, getBuilderMarkerId());
+			new EjavaMarkerHelper().removeAllMarkers(resource, getBuilderMarkerId());
 			return false;
 		}
-		if (resource instanceof org.eclipse.core.resources.IFile && resource.getName().endsWith("." + new org.emftext.language.java.ejava.resource.ejava.mopp.EjavaMetaInformation().getSyntaxName())) {
+		
+		if (resource instanceof IFile && resource.getName().endsWith("." + new EjavaMetaInformation().getSyntaxName())) {
 			// First, call the default generated builder that is usually customized to add
 			// compilation-like behavior.
 			
 			//=== CHANGED: eJava's wrapper mechanism needs one resource set per resource!
-			ResourceSet resourceLocatResourceResourceSet = new ResourceSetImpl();
-			build((org.eclipse.core.resources.IFile) resource, resourceLocatResourceResourceSet, monitor);
-			runTaskItemBuilder((org.eclipse.core.resources.IFile) resource, resourceLocatResourceResourceSet, monitor);
+			ResourceSet resourceLocalResourceSet = new ResourceSetImpl();
+			Map<String, Object> extensionToFactoryMap = resourceLocalResourceSet.getResourceFactoryRegistry().getExtensionToFactoryMap();
+			extensionToFactoryMap.put("ecore", new SystemIndependentXMIResourceFactory());
+			extensionToFactoryMap.put("genmodel", new SystemIndependentXMIResourceFactory());
+			
+			build((IFile) resource, resourceLocalResourceSet, monitor);
+			runTaskItemBuilder((IFile) resource, resourceLocalResourceSet, monitor);
 			//====
 			
 			return false;

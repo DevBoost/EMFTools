@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -60,7 +60,7 @@ public class EjavaBuilder implements IEjavaBuilder {
 		if (!resource.getContents().isEmpty()) {
 			createBodyAnnotations(resource);
 		}
-		return org.eclipse.core.runtime.Status.OK_STATUS;
+		return Status.OK_STATUS;
 	}
 
 
@@ -79,9 +79,9 @@ public class EjavaBuilder implements IEjavaBuilder {
 			return;
 		}
 
-		for(Resource r : new ArrayList<Resource>(resource.getResourceSet().getResources())) {
-			if(!r.getContents().isEmpty()) {
-				if(r.getContents().get(0) instanceof EPackageWrapper) {
+		for (Resource r : new ArrayList<Resource>(resource.getResourceSet().getResources())) {
+			if (!r.getContents().isEmpty()) {
+				if (r.getContents().get(0) instanceof EPackageWrapper) {
 					setToRealJavaPackage((EPackageWrapper) r.getContents().get(0));
 				}
 			}
@@ -90,7 +90,7 @@ public class EjavaBuilder implements IEjavaBuilder {
 		resource.getResourceSet().getLoadOptions().put(
 				JavaClasspath.OPTION_ALWAYS_USE_FULLY_QUALIFIED_NAMES, Boolean.TRUE);
 
-		for(ConcreteClassifier concreteClassifier : ePackageWrapper.getClassifiers()) {
+		for (ConcreteClassifier concreteClassifier : ePackageWrapper.getClassifiers()) {
 			for (Member member : concreteClassifier.getMembers()) {
 				if (member instanceof EOperationWrapper) {
 					EOperationWrapper wrapper = (EOperationWrapper) member;

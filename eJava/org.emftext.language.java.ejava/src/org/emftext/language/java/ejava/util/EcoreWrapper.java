@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -83,7 +83,7 @@ public class EcoreWrapper {
 	public static void wrap(EPackageWrapper mainEPackageWrapper) {
 		EMap<EList<String>, GenPackage> genPackagesInScope = findGenPackagesInScope(mainEPackageWrapper);
 
-		for(final EList<String> namespaces : genPackagesInScope.keySet()) {
+		for (final List<String> namespaces : genPackagesInScope.keySet()) {
 			GenPackage genPackage = genPackagesInScope.get(namespaces);
 			if (genPackage.eIsProxy() && genPackage.getEcorePackage().eIsProxy()) {
 				String message = "Can't find generator package for " + namespaces.toString();
@@ -121,7 +121,7 @@ public class EcoreWrapper {
 		});
 	}
 
-	public static void wrapEPackage(GenPackage genPackage, EList<String> namespaces, EPackageWrapper mainEPackageWrapper) {
+	public static void wrapEPackage(GenPackage genPackage, List<String> namespaces, EPackageWrapper mainEPackageWrapper) {
 		EPackageWrapper wrapper = null;
 		Resource wrapperResource = null;
 		JavaClasspath cp = JavaClasspath.get(mainEPackageWrapper);
@@ -510,5 +510,4 @@ public class EcoreWrapper {
 	private static String firstToUpperCase(String s) {
 		return s.substring(0, 1).toUpperCase() + s.substring(1);
 	}
-
 }

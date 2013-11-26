@@ -35,6 +35,7 @@ OPTIONS {
 	overrideNewFileWizardPage = "false";
 	overrideNewFileWizard = "false";
 	
+	additionalDependencies = "org.eclipse.emf.ecore.xmi";
 	additionalUIDependencies = "org.eclipse.jdt.core";
 }
 
