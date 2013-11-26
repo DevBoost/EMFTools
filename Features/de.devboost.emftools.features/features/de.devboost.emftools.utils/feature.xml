@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <feature
-	id="org.emftext.language.mecore"
-	label="MinimalEcore"
+	id="de.devboost.emftools.utils"
+	label="EMF/Ecore Utilities"
 	provider-name="DevBoost GmbH" 
-	version="0.3.0">
+	version="0.1.0">
 
-   <description>MinimalEcore is a compact textual syntax for Ecore models.</description>
+   <description>EMF/Ecore Utilities is a collections of utility classes for handling Ecore models.</description>
 
    <copyright>Copyright (c) 2006-2013 Software Technology Group, Dresden University of Technology, Germany; DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026.</copyright>
 
@@ -26,18 +26,8 @@ Contributors:
    <requires>
 	 <import feature="org.eclipse.platform"/>
 	 <import feature="org.eclipse.emf"/>
-	 <import feature="org.emftext.commons.antlr3_4_0"/>
-	 <import feature="de.devboost.emftools.utils"/>
    </requires>
 
-   <plugin download-size="0" id="org.emftext.language.mecore" install-size="0" unpack="false" version="0.0.0"/>
+   <plugin download-size="0" id="de.devboost.emftools.utils" install-size="0" unpack="false" version="0.0.0"/>
 
-   <plugin download-size="0" id="org.emftext.language.mecore.edit" install-size="0" unpack="false" version="0.0.0"/>
-
-   <plugin download-size="0" id="org.emftext.language.mecore.postprocessing" install-size="0" unpack="false" version="0.0.0"/>
-
-   <plugin download-size="0" id="org.emftext.language.mecore.resource.mecore" install-size="0" unpack="false" version="0.0.0"/>
-         
-   <plugin download-size="0" id="org.emftext.language.mecore.resource.mecore.ui" install-size="0" unpack="false" version="0.0.0"/>
-         
 </feature>

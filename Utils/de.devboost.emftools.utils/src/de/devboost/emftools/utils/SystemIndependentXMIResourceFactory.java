@@ -13,7 +13,7 @@
  *   DevBoost GmbH - Berlin, Germany
  *      - initial API and implementation
  ******************************************************************************/
-package org.emftext.language.java.ejava.resource.ejava.mopp;
+package de.devboost.emftools.utils;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -24,7 +24,6 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
 
-// TODO This class has been copied to 'org.emftext.language.java.ejava.resource.ejava'
 public class SystemIndependentXMIResourceFactory extends
 		EcoreResourceFactoryImpl {
 	

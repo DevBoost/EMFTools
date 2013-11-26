@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
  org.emftext.language.java,
  org.emftext.commons.layout,
  org.emftext.language.java.resource.java,
- org.eclipse.emf.ecore.xmi
+ org.eclipse.emf.ecore.xmi,
+ de.devboost.emftools.utils
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.emftext.language.java.ejava.resource.ejava,

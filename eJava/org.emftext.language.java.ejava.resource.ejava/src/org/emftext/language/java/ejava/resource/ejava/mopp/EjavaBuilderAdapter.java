@@ -32,6 +32,8 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.emftext.language.java.ejava.resource.ejava.EjavaEProblemType;
 import org.emftext.language.java.ejava.resource.ejava.IEjavaBuilder;
 
+import de.devboost.emftools.utils.SystemIndependentXMIResourceFactory;
+
 public class EjavaBuilderAdapter extends IncrementalProjectBuilder implements IResourceDeltaVisitor, IResourceVisitor {
 	
 	/**

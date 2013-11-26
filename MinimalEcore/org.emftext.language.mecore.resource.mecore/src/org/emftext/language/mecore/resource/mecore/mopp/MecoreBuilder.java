@@ -49,6 +49,8 @@ import org.emftext.language.mecore.MPackage;
 import org.emftext.language.mecore.resource.mecore.IMecoreBuilder;
 import org.emftext.language.mecore.resource.mecore.MecoreEProblemType;
 
+import de.devboost.emftools.utils.SystemIndependentXMIResourceFactory;
+
 /**
  * The MecoreBuilder is invoked when .mecore files are saved. It converts the
  * MEcore models to Ecore models and saves them with the respective file 

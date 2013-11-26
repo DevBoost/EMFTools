@@ -13,7 +13,7 @@
  *   DevBoost GmbH - Berlin, Germany
  *      - initial API and implementation
  ******************************************************************************/
-package org.emftext.language.java.ejava.resource.ejava.mopp;
+package de.devboost.emftools.utils;
 
 import java.util.Map;
 
@@ -33,7 +33,6 @@ import org.eclipse.emf.ecore.xmi.impl.XMLString;
  * This behavior is required to get identical result when saving XMI resource on
  * systems running a different OS.
  */
-// TODO This class has been copied to 'org.emftext.language.java.ejava.resource.ejava'
 public class SystemIndependentXMIResource extends XMIResourceImpl {
 	
 	public SystemIndependentXMIResource(URI uri) {
