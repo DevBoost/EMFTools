@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2012
+ * Copyright (c) 2006-2013
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -44,12 +44,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.Resource.Factory.Registry;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreValidator;
-import org.eclipse.emf.ecore.xmi.XMLResource;
-import org.eclipse.emf.ecore.xmi.XMLSave;
 import org.eclipse.emf.ecore.xmi.impl.EcoreResourceFactoryImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMIResourceImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMISaveImpl;
-import org.eclipse.emf.ecore.xmi.impl.XMLString;
 import org.emftext.language.mecore.MPackage;
 import org.emftext.language.mecore.resource.mecore.IMecoreBuilder;
 import org.emftext.language.mecore.resource.mecore.MecoreEProblemType;
@@ -57,10 +52,10 @@ import org.emftext.language.mecore.resource.mecore.MecoreEProblemType;
 /**
  * The MecoreBuilder is invoked when .mecore files are saved. It converts the
  * MEcore models to Ecore models and saves them with the respective file 
- * extension. The build does also invoke the EcoreValidator to check whether
+ * extension. The builder does also invoke the EcoreValidator to check whether
  * the produced Ecore models are valid. If problems are found they are mapped
  * to the corresponding elements of the MEcore model and problem markers are 
- * attached.
+ * created.
  */
 public class MecoreBuilder implements IMecoreBuilder {
 	
@@ -110,13 +105,13 @@ public class MecoreBuilder implements IMecoreBuilder {
 		try {
 			ecoreResource.save(null);
 		} catch (IOException e) {
-			e.printStackTrace();
-			return org.eclipse.core.runtime.Status.CANCEL_STATUS;
+			MecorePlugin.logError("Can't save Ecore file.", e);
+			return Status.CANCEL_STATUS;
 		}
 		reloadGeneratorModel(ecoreResource);
 		
 		runEcoreValidation(resource, ecoreResource, wrapper);
-		return org.eclipse.core.runtime.Status.OK_STATUS;
+		return Status.OK_STATUS;
 	}
 
 	/**
@@ -129,52 +124,7 @@ public class MecoreBuilder implements IMecoreBuilder {
 	private void replaceResourceFactories(ResourceSet resourceSet) {
 		Registry resourceFactoryRegistry = resourceSet.getResourceFactoryRegistry();
 		Map<String, Object> extensionToFactoryMap = resourceFactoryRegistry.getExtensionToFactoryMap();
-		EcoreResourceFactoryImpl modifiedEcoreResourceFactory = new EcoreResourceFactoryImpl() {
-			
-			@Override
-			public Resource createResource(URI uri) {
-				final Resource originalResource = super.createResource(uri);
-				final Map<Object, Object> originalSaveOptions = new LinkedHashMap<Object, Object>();
-				if (originalResource instanceof XMLResource) {
-					XMLResource xmlResource = (XMLResource) originalResource;
-					originalSaveOptions.putAll(xmlResource.getDefaultSaveOptions());
-				}
-				
-				XMIResourceImpl modifiedResource = new XMIResourceImpl(uri) {
-					
-					@Override
-					protected XMLSave createXMLSave() {
-						return new XMISaveImpl(createXMLHelper()) {
-							
-							@Override
-							protected void init(XMLResource resource,
-									Map<?, ?> options) {
-								super.init(resource, options);
-								if (doc != null) {
-									String temporaryFileName = doc.getTemporaryFileName();
-									// get line width
-									Integer lineWidth = (Integer) options.get(XMLResource.OPTION_LINE_WIDTH);
-									int effectiveLineWidth = lineWidth == null ? Integer.MAX_VALUE : lineWidth;
-									
-									doc = new XMLString(effectiveLineWidth, publicId, systemId, temporaryFileName) {
-										
-										private static final long serialVersionUID = -672620373813232183L;
-
-										public void addLine() {
-											// use unix line breaks
-											add("\n");
-											currentLineWidth = 0;
-										}
-									};
-								}
-							}
-						};
-					}
-				};
-				modifiedResource.getDefaultSaveOptions().putAll(originalSaveOptions);
-				return modifiedResource;
-			}
-		};
+		EcoreResourceFactoryImpl modifiedEcoreResourceFactory = new SystemIndependentXMIResourceFactory();
 		extensionToFactoryMap.put("ecore", modifiedEcoreResourceFactory);
 		extensionToFactoryMap.put("genmodel", modifiedEcoreResourceFactory);
 	}
