@@ -39,7 +39,7 @@ public class EjavaBuilderAdapter extends IncrementalProjectBuilder implements IR
 	/**
 	 * The ID of the default, generated builder.
 	 */
-	public final static String BUILDER_ID = "builder";
+	public final static String BUILDER_ID = "org.emftext.language.java.ejava.resource.ejava.builder";
 	
 	private IEjavaBuilder defaultBuilder = new EjavaBuilder();
 	
