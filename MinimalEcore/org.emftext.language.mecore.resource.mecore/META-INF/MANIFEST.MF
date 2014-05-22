@@ -5,16 +5,16 @@ Bundle-SymbolicName: org.emftext.language.mecore.resource.mecore;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Vendor: Software Technology Group - TU Dresden Germany
 Require-Bundle: org.eclipse.core.runtime;resolution:=optional,
- org.eclipse.core.resources;resolution:=optional,
- org.eclipse.emf.ecore,
- org.eclipse.emf.ecore.change,
- org.eclipse.emf.validation;resolution:=optional,
- org.emftext.access;resolution:=optional,
- org.eclipse.emf.codegen.ecore,
- org.eclipse.emf.ecore.xmi,
- org.emftext.commons.antlr3_4_0,
- org.emftext.language.mecore,
- de.devboost.emftools.utils
+  org.eclipse.core.resources;resolution:=optional,
+  org.eclipse.emf.ecore,
+  org.eclipse.emf.ecore.change,
+  org.eclipse.emf.validation;resolution:=optional,
+  org.emftext.access;resolution:=optional,
+  org.eclipse.emf.codegen.ecore,
+  org.eclipse.emf.ecore.xmi,
+  de.devboost.emftools.utils,
+  org.emftext.commons.antlr3_4_0,
+  org.emftext.language.mecore
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Export-Package: org.emftext.language.mecore.resource.mecore,
