@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006-2013
+ * Copyright (c) 2006-2014
  * Software Technology Group, Dresden University of Technology
  * DevBoost GmbH, Berlin, Amtsgericht Charlottenburg, HRB 140026
  * 
@@ -53,10 +53,10 @@ import de.devboost.emftools.utils.SystemIndependentXMIResourceFactory;
 
 /**
  * The MecoreBuilder is invoked when .mecore files are saved. It converts the
- * MEcore models to Ecore models and saves them with the respective file 
+ * MEcore models to Ecore models and saves them with the respective file
  * extension. The builder does also invoke the EcoreValidator to check whether
- * the produced Ecore models are valid. If problems are found they are mapped
- * to the corresponding elements of the MEcore model and problem markers are 
+ * the produced Ecore models are valid. If problems are found they are mapped to
+ * the corresponding elements of the MEcore model and problem markers are
  * created.
  */
 public class MecoreBuilder implements IMecoreBuilder {
@@ -254,7 +254,7 @@ public class MecoreBuilder implements IMecoreBuilder {
         	throw new DiagnosticException(diag);
         }
         
-        new Job("saving genmodel after reconciling") {
+        new Job("Saving genmodel after reconciling") {
         	
         	@Override
         	protected IStatus run(IProgressMonitor monitor) {
