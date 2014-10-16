@@ -10,25 +10,27 @@ dynamicfile:http://www.emftext.org/update_trunk/org.emftext.deploy-complete.zip
 dynamicfile:http://www.jamopp.org/update_trunk/org.jamopp.deploy-complete.zip
 
 // Eclipse Platform
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops4/R-4.3-201306052000/eclipse-platform-4.3-win32-x86_64.zip
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops4/R-4.3-201306052000/eclipse-4.3-delta-pack.zip
+get:http://devboost.de/eclipse-mirror/downloads/drops4/R-4.4-201406061215/eclipse-platform-4.4-win32-x86_64.zip
+get:http://devboost.de/eclipse-mirror/downloads/drops4/R-4.4-201406061215/eclipse-4.4-delta-pack.zip
 // JDT
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/eclipse/downloads/drops4/R-4.3-201306052000/org.eclipse.jdt-4.3.zip
+get:http://devboost.de/eclipse-mirror/downloads/drops4/R-4.4-201406061215/org.eclipse.jdt-4.4.zip
+// PDE
+get:http://devboost.de/eclipse-mirror/downloads/drops4/R-4.4-201406061215/org.eclipse.pde-4.4.zip
 // EMF
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/modeling/emf/emf/downloads/drops/2.9.0/R201306100406/emf-xsd-SDK-2.9.0.zip
+get:http://devboost.de/eclipse-mirror/modeling/emf/emf/downloads/drops/2.10.0/R201405190339/emf-xsd-SDK-2.10.0.zip
 // EMF Validation (core plugin and feature)
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/modeling/emf/validation/downloads/drops/1.7.0/R201306111341/emf-validation-runtime-1.7.0.zip!eclipse/plugins/org.eclipse.emf.validation_1.7.0.201306111341.jar
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/modeling/emf/validation/downloads/drops/1.7.0/R201306111341/emf-validation-runtime-1.7.0.zip!eclipse/plugins/org.eclipse.emf.validation.ui_1.7.0.201306111341.jar
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/modeling/emf/validation/downloads/drops/1.7.0/R201306111341/emf-validation-runtime-1.7.0.zip!eclipse/plugins/org.eclipse.emf.validation.ui.ide_1.3.0.201306111341.jar
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/modeling/emf/validation/downloads/drops/1.7.0/R201306111341/emf-validation-runtime-1.7.0.zip!eclipse/features/org.eclipse.emf.validation_1.7.0.201306111341/feature.xml
+get:http://devboost.de/eclipse-mirror/modeling/emf/validation/downloads/drops/1.8.0/R201405281429/emf-validation-runtime-1.8.0.zip!eclipse/plugins/org.eclipse.emf.validation_1.8.0.201405281429.jar
+get:http://devboost.de/eclipse-mirror/modeling/emf/validation/downloads/drops/1.8.0/R201405281429/emf-validation-runtime-1.8.0.zip!eclipse/plugins/org.eclipse.emf.validation.ui_1.7.0.201405281429.jar
+get:http://devboost.de/eclipse-mirror/modeling/emf/validation/downloads/drops/1.8.0/R201405281429/emf-validation-runtime-1.8.0.zip!eclipse/plugins/org.eclipse.emf.validation.ui.ide_1.3.0.201405281429.jar
+get:http://devboost.de/eclipse-mirror/modeling/emf/validation/downloads/drops/1.8.0/R201405281429/emf-validation-runtime-1.8.0.zip!eclipse/features/org.eclipse.emf.validation_1.8.0.201405281429/feature.xml
 
 // EMF Compare (required for tests)
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/modeling/emf/compare/downloads/drops/2.1.0/R201306250935/emf-compare-update-2.1.0a.zip!plugins/org.eclipse.emf.compare_3.0.0.201306250935.jar
+get:http://devboost.de/eclipse-mirror/modeling/emf/compare/downloads/drops/2.1.0/R201306250935/emf-compare-update-2.1.0a.zip!plugins/org.eclipse.emf.compare_3.0.0.201306250935.jar
 // Google Guava (required by EMF Compare)
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/tools/orbit/downloads/drops/R20130517111416/repository/plugins/com.google.guava_11.0.2.v201303041551.jar
+get:http://devboost.de/eclipse-mirror/tools/orbit/downloads/drops/R20130517111416/repository/plugins/com.google.guava_11.0.2.v201303041551.jar
 
 // Feedback
 git:https://github.com/DevBoost/Feedback.git!Core/
 
 // Apache Commons Lang (required for EMFCustomize for determining comments containing one line with the @model annotation)
-get:http://ftp-stud.fht-esslingen.de/pub/Mirrors/eclipse/tools/orbit/downloads/drops/R20130517111416/repository/plugins/org.apache.commons.lang_2.6.0.v201205030909.jar
+get:http://devboost.de/eclipse-mirror/tools/orbit/downloads/drops/R20130517111416/repository/plugins/org.apache.commons.lang_2.6.0.v201205030909.jar
