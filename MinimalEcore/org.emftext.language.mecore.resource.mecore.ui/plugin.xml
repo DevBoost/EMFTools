@@ -25,6 +25,8 @@
 		</page>
 		<page name="Brackets" id="org.emftext.language.mecore.resource.mecore.ui.MecoreBracketPreferencePage" class="org.emftext.language.mecore.resource.mecore.ui.MecoreBracketPreferencePage" category="org.emftext.language.mecore.resource.mecore.ui.MecorePreferencePage">
 		</page>
+		<page name="Content Assist" id="org.emftext.language.mecore.resource.mecore.ui.MecoreContentAssistPreferencePage" class="org.emftext.language.mecore.resource.mecore.ui.MecoreContentAssistPreferencePage" category="org.emftext.language.mecore.resource.mecore.ui.MecorePreferencePage">
+		</page>
 	</extension>
 	
 	<extension point="org.eclipse.ui.newWizards">
