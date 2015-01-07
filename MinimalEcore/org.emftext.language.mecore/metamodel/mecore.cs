@@ -69,12 +69,12 @@ RULES {
 	MEnum    ::= annotations* "enum" name[UPPER] ("(" literals* ")")?;
 	MEnumLiteral ::= annotations* name[UPPER] literal['"','"']?;
 	
-	MFeature ::= annotations* ncReference["~" : ""] name[LOWER] type multiplicity? ("<>" opposite[UPPER])?;
+	MFeature ::= annotations* ncReference["~" : ""] name[LOWER] type multiplicity? ("<>" opposite[UPPER])? (";")?;
 	
 	MOperation ::= annotations*  
 		("<" typeParameters ("," typeParameters)* ">")?
 		name[LOWER] 
-		"(" (parameters ("," parameters)*)? ")" type multiplicity?;
+		"(" (parameters ("," parameters)*)? ")" type multiplicity? (";")?;
 		
 	MParameter ::= name[LOWER] type
 		("<" typeArguments ("," typeArguments)* ">")? 
