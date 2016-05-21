@@ -4,10 +4,10 @@ git:https://github.com/DevBoost/BuildBoost.git!Extensions/JUnit/
 git:https://github.com/DevBoost/BuildBoost.git!Extensions/UpdateSite/
 
 // EMFText (Update site created by latest successful build)
-dynamicfile:http://www.emftext.org/update_trunk/org.emftext.deploy-complete.zip
+dynamicfile:http://update.emftext.org/trunk/org.emftext.deploy-complete.zip
 
 // JaMoPP (Update site created by latest successful build)
-dynamicfile:http://www.jamopp.org/update_trunk/org.jamopp.deploy-complete.zip
+dynamicfile:http://update.jamopp.org/trunk/org.jamopp.deploy-complete.zip
 
 // Eclipse Platform
 get:http://devboost.de/eclipse-mirror/downloads/drops4/R-4.4-201406061215/eclipse-platform-4.4-win32-x86_64.zip
