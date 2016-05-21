@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <associateSites>
-	<associateSite label="Juno"
-		url="http://download.eclipse.org/releases/juno"/>
+	<associateSite label="Mars"
+		url="http://download.eclipse.org/releases/mars"/>
 	<associateSite label="The Eclipse Project Updates"
-		url="http://download.eclipse.org/eclipse/updates/4.2"/>
+		url="http://download.eclipse.org/eclipse/updates/4.5"/>
 	<associateSite label="EMFText"
-		url="http://www.emftext.org/update_trunk"/>	
+		url="http://update.emftext.org/trunk"/>
 	<associateSite label="JaMoPP"
-		url="http://www.jamopp.org/update_trunk"/>	
+		url="http://update.jamopp.org/trunk"/>
 	<associateSite label="DevBoost Open-Source Feedback"
 		url="http://www.devboost.de/eclipse-feedback/update_trunk"/>	
 </associateSites>
