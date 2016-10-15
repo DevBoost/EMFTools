@@ -1,4 +1,4 @@
 site/vendor = DevBoost GmbH
-site/uploadPath = jetpack-updates.devboost.de:/home/jenkins/emftools/update_trunk
+site/uploadPath = jetpack-updates.devboost.de:/home/jenkins/public/emftools/update_trunk
 site/usernameProperty = DEVBOOST_UPLOAD_USER
 site/passwordProperty = DEVBOOST_UPLOAD_PASS
