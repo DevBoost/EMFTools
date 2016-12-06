@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<site associateSitesURL="http://www.devboost.de/emftools/update_trunk/associateSites.xml">
+<site>
 	<description>
 		Update site for MinimalEcore, EFactory, eJava, EMFCustomize and EMFDoc.
 	</description>
